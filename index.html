@@ -183,6 +183,72 @@ function App() {
     }catch(e){alert('\u274C Invalid code. Copy the full export string.');}
   };
 
+  const [aiDrafting, setAiDrafting] = React.useState(false);
+  const [aiError, setAiError] = React.useState('');
+
+  const aiDraftReport = async () => {
+    setAiDrafting(true);
+    setAiError('');
+    try {
+      // Build context from live data
+      const phaseNames = {1:'Days 1-30 (Earn the Right)',2:'Days 31-60 (Surface Clarity)',3:'Days 61-90 (Align Direction)'};
+      const statusNames = {complete:'Complete',in_progress:'In Progress',blocked:'Blocked',not_started:'Not Started'};
+      const allObjs = Object.entries(objs).flatMap(([pid,items])=>items.map(o=>({...o,phase:phaseNames[pid]})));
+      const done = allObjs.filter(o=>o.status==='complete');
+      const active = allObjs.filter(o=>o.status==='in_progress');
+      const blocked = allObjs.filter(o=>o.status==='blocked');
+      const recentIntel = intel.slice(0,5);
+      const dayNum = (()=>{if(!startDate)return null;const d=Math.floor((new Date()-new Date(startDate))/86400000)+1;return d<1?0:d>90?90:d;})();
+
+      const prompt = `You are helping a new Business Unit Director at CBRE GWS Local Victoria write their weekly onboarding progress report. Write in first person, professional but direct. Be specific and concise.
+
+CURRENT STATUS:
+- Day ${dayNum||'(not set)'} of 90
+- Objectives complete: ${done.length}/${allObjs.length}
+- In progress: ${active.length}, Blocked: ${blocked.length}
+
+COMPLETED THIS PERIOD:
+${done.length>0?done.map(o=>`- ${o.text} [${o.phase}]${o.notes?` (Note: ${o.notes})`:''}`).join('\n'):'None yet'}
+
+ACTIVE / IN PROGRESS:
+${active.length>0?active.map(o=>`- ${o.text} [${o.phase}]${o.notes?` (Note: ${o.notes})`:''}`).join('\n'):'None'}
+
+BLOCKED:
+${blocked.length>0?blocked.map(o=>`- ${o.text} [${o.phase}]${o.notes?` (Note: ${o.notes})`:''}`).join('\n'):'None'}
+
+RECENT INTEL & OBSERVATIONS:
+${recentIntel.length>0?recentIntel.map(i=>`- ${i.text} [${i.date}]`).join('\n'):'None logged'}
+
+Write THREE sections. Output ONLY valid JSON like this (no markdown, no preamble):
+{"highlights":"...","blockers":"...","nextWeek":"..."}
+
+Guidelines:
+- highlights: 3-4 bullet points (use • ) covering what was achieved, key conversations, observations
+- blockers: any blocked objectives + risks; if none write "No blockers this week."
+- nextWeek: 3 specific priorities for next week based on what is active or not started`;
+
+      const resp = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 1000,
+          messages: [{ role: 'user', content: prompt }]
+        })
+      });
+      const data = await resp.json();
+      const text = data.content?.[0]?.text || '';
+      const clean = text.replace(/```json|```/g,'').trim();
+      const parsed = JSON.parse(clean);
+      if (parsed.highlights) updateRpt('highlights', parsed.highlights);
+      if (parsed.blockers)   updateRpt('blockers',   parsed.blockers);
+      if (parsed.nextWeek)   updateRpt('nextWeek',   parsed.nextWeek);
+    } catch(e) {
+      setAiError('AI draft failed: ' + e.message);
+    }
+    setAiDrafting(false);
+  };
+
   const setStatus = (pid,id,status)=>{
     const next={...objs,[pid]:objs[pid].map(o=>o.id===id?{...o,status}:o)};
     setObjs(next); persist(next,intel,startDate);
@@ -413,6 +479,11 @@ function App() {
           <textarea defaultValue={rpt[f.k]} onBlur={e=>updateRpt(f.k,e.target.value)} placeholder={f.ph} rows={3} style={{...inp,resize:"none"}}/>
         </div>
       ))}
+      <button onClick={aiDraftReport} disabled={aiDrafting} style={{...btnG,marginBottom:"8px",background:aiDrafting?C.greenDark:C.green,opacity:aiDrafting?0.7:1}}>
+        {aiDrafting ? '⏳ AI DRAFTING...' : '✨ AI DRAFT REPORT'}
+      </button>
+      {aiError && <div style={{color:C.risk,fontSize:"12px",marginBottom:"8px",fontFamily:"monospace"}}>{aiError}</div>}
+      <div style={{fontSize:"11px",color:C.muted,textAlign:"center",marginBottom:"8px",fontStyle:"italic"}}>Reads your objectives & intel → drafts highlights, blockers & next week for you to review</div>
       <button onClick={printReport} style={{...btnG,marginTop:"4px",marginBottom:"6px"}}>🖨 PRINT / EXPORT PDF</button>
       <div style={{fontSize:"11px",color:C.muted,textAlign:"center",marginBottom:"20px",fontStyle:"italic"}}>Opens print dialog — save as PDF to share</div>
       <div style={lbl}>Preview</div>
