@@ -185,6 +185,9 @@ function App() {
 
   const [aiDrafting, setAiDrafting] = React.useState(false);
   const [aiError, setAiError] = React.useState('');
+  const [emailTo, setEmailTo] = React.useState('');
+  const [emailSending, setEmailSending] = React.useState(false);
+  const [emailStatus, setEmailStatus] = React.useState('');
 
   const aiDraftReport = () => {
     setAiDrafting(true);
@@ -221,6 +224,41 @@ function App() {
     }
     setAiDrafting(false);
   };
+
+  const sendWeeklyEmail = async () => {
+    if (!emailTo) { setEmailStatus('error:Please enter a recipient email address.'); return; }
+    setEmailSending(true); setEmailStatus('sending');
+    try {
+      const phaseNames = {1:'Days 1-30 (Earn the Right)',2:'Days 31-60 (Surface Clarity)',3:'Days 61-90 (Align Direction)'};
+      const allObjs = Object.entries(objs).flatMap(([pid,items])=>items.map(o=>({...o,phase:phaseNames[pid]})));
+      const dayNum = startDate ? Math.min(90,Math.max(1,Math.floor((new Date()-new Date(startDate))/86400000)+1)) : '—';
+      const weekEnd = rpt.weekEnding || new Date().toLocaleDateString('en-AU');
+      const si = {complete:'✅',in_progress:'🟡',blocked:'🔴',not_started:'⚪'};
+      const subject = 'CBRE GWS Local VIC · BUD Weekly Update · Week Ending ' + weekEnd + ' (Day ' + dayNum + ' of 90)';
+      const emailBody = '<div style="font-family:Arial,sans-serif;max-width:650px;color:#1a1a1a;"><div style="background:#006241;padding:20px 28px;"><div style="display:flex;align-items:center;gap:14px;"><span style="background:#3dbe7a;color:#0b1f14;font-weight:900;font-size:14px;padding:4px 10px;border-radius:2px;">CBRE</span><div><div style="color:white;font-size:17px;font-weight:700;">GWS LOCAL · VICTORIA</div><div style="color:rgba(255,255,255,0.8);font-size:11px;letter-spacing:2px;">BUSINESS UNIT DIRECTOR · WEEKLY UPDATE</div></div><div style="margin-left:auto;color:white;text-align:right;font-size:12px;"><strong>Week Ending</strong><br/>' + weekEnd + '<br/>Day ' + dayNum + ' of 90</div></div></div><div style="padding:24px 28px;">' + (rpt.highlights?'<div style="margin-bottom:18px;"><div style="font-size:10px;font-weight:700;letter-spacing:2px;color:#006241;border-bottom:2px solid #3dbe7a;padding-bottom:3px;margin-bottom:8px;">PROGRESS / HIGHLIGHTS</div><div style="font-size:13px;line-height:1.8;white-space:pre-wrap;">'+rpt.highlights+'</div></div>':'') + (rpt.blockers?'<div style="margin-bottom:18px;"><div style="font-size:10px;font-weight:700;letter-spacing:2px;color:#006241;border-bottom:2px solid #3dbe7a;padding-bottom:3px;margin-bottom:8px;">BLOCKERS / RISKS</div><div style="font-size:13px;line-height:1.8;white-space:pre-wrap;">'+rpt.blockers+'</div></div>':'') + (rpt.nextWeek?'<div style="margin-bottom:18px;"><div style="font-size:10px;font-weight:700;letter-spacing:2px;color:#006241;border-bottom:2px solid #3dbe7a;padding-bottom:3px;margin-bottom:8px;">NEXT WEEK PRIORITIES</div><div style="font-size:13px;line-height:1.8;white-space:pre-wrap;">'+rpt.nextWeek+'</div></div>':'') + '<div><div style="font-size:10px;font-weight:700;letter-spacing:2px;color:#006241;border-bottom:2px solid #3dbe7a;padding-bottom:3px;margin-bottom:8px;">OBJECTIVE STATUS</div><table style="width:100%;border-collapse:collapse;font-size:12px;"><tr style="background:#006241;color:white;"><th style="padding:6px 10px;text-align:left;">Phase</th><th style="padding:6px 10px;text-align:left;">Objective</th><th style="padding:6px 10px;text-align:center;">Status</th></tr>' + allObjs.map((o,i)=>'<tr style="background:'+(i%2===0?'#f5faf7':'white')+'"><td style="padding:5px 10px;font-size:11px;color:#555;border-bottom:1px solid #eee;">'+o.phase+'</td><td style="padding:5px 10px;border-bottom:1px solid #eee;">'+o.text+'</td><td style="padding:5px 10px;text-align:center;border-bottom:1px solid #eee;">'+(si[o.status]||'⚪')+'</td></tr>').join('') + '</table></div></div><div style="background:#f0f0f0;padding:8px 28px;font-size:10px;color:#666;display:flex;justify-content:space-between;"><span>CBRE GWS Local · Victoria</span><span>Confidential</span><span>' + new Date().toLocaleDateString('en-AU',{day:'2-digit',month:'long',year:'numeric'}) + '</span></div></div>';
+      const resp = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({
+          model:'claude-sonnet-4-20250514', max_tokens:500,
+          mcp_servers:[{type:'url',url:'https://gmail.mcp.claude.com/mcp',name:'gmail'}],
+          messages:[{role:'user',content:'Send an email using the Gmail tool. To: '+emailTo+'. Subject: "'+subject+'". Send as HTML. Body: '+emailBody}]
+        })
+      });
+      const data = await resp.json();
+      if (data.error) { setEmailStatus('error:'+data.error.message); }
+      else {
+        const hasToolUse = (data.content||[]).some(b=>b.type==='tool_use'||b.type==='mcp_tool_use'||b.type==='mcp_tool_result');
+        const textBlock = (data.content||[]).find(b=>b.type==='text');
+        const text = textBlock ? textBlock.text.toLowerCase() : '';
+        if (hasToolUse || text.includes('sent') || text.includes('success')) { setEmailStatus('sent'); }
+        else { setEmailStatus('error:Unexpected response — check Gmail is connected in Claude.ai settings.'); }
+      }
+    } catch(e) { setEmailStatus('error:'+e.message); }
+    setEmailSending(false);
+  };
+
+
 
   const setStatus = (pid,id,status)=>{
     const next={...objs,[pid]:objs[pid].map(o=>o.id===id?{...o,status}:o)};
@@ -527,6 +565,16 @@ function App() {
       {aiError && <div style={{color:C.risk,fontSize:"12px",marginBottom:"8px",fontFamily:"monospace"}}>{aiError}</div>}
       <div style={{fontSize:"11px",color:C.muted,textAlign:"center",marginBottom:"8px",fontStyle:"italic"}}>Reads your objectives & intel → drafts highlights, blockers & next week for you to review</div>
       <button onClick={printReport} style={{...btnG,marginTop:"4px",marginBottom:"6px"}}>🖨 PRINT / EXPORT PDF</button>
+      <div style={{marginTop:"16px",borderTop:"1px solid "+C.border,paddingTop:"16px"}}>
+        <div style={{fontSize:"10px",fontWeight:700,letterSpacing:"2px",color:C.muted,marginBottom:"8px"}}>SEND WEEKLY EMAIL</div>
+        <input type="email" placeholder="Recipient email address..." value={emailTo} onChange={e=>setEmailTo(e.target.value)} style={{width:"100%",background:C.card,border:"1px solid "+C.border,color:C.text,padding:"10px 12px",fontSize:"13px",borderRadius:"4px",boxSizing:"border-box",marginBottom:"8px",fontFamily:"monospace"}}/>
+        <button onClick={sendWeeklyEmail} disabled={emailSending} style={{...btnG,background:emailSending?"#1a5c38":C.green,opacity:emailSending?0.7:1,marginBottom:"6px"}}>
+          {emailSending ? '⏳ SENDING...' : '📧 SEND WEEKLY EMAIL'}
+        </button>
+        {emailStatus==='sent' && <div style={{color:C.green,fontSize:"12px",textAlign:"center",marginTop:"4px",fontWeight:700}}>✅ Email sent successfully!</div>}
+        {emailStatus.startsWith('error:') && <div style={{color:C.risk,fontSize:"12px",textAlign:"center",marginTop:"4px"}}>⚠️ {emailStatus.replace('error:','')}</div>}
+        <div style={{fontSize:"11px",color:C.muted,textAlign:"center",marginTop:"6px",fontStyle:"italic"}}>Sends branded HTML report via Gmail · Run AI Draft first for best results</div>
+      </div>
       <div style={{fontSize:"11px",color:C.muted,textAlign:"center",marginBottom:"20px",fontStyle:"italic"}}>Opens print dialog — save as PDF to share</div>
       <div style={lbl}>Preview</div>
       <div style={{background:C.card,border:`1px solid ${C.border}`,borderRadius:"3px",padding:"14px",fontSize:"13px",color:C.muted,lineHeight:"1.9"}}>
