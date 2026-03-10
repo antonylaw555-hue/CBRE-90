@@ -145,6 +145,15 @@ const IcoIntel  = ()=><svg width="19" height="19" viewBox="0 0 24 24" fill="none
 const IcoStats  = ()=><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>;
 const IcoReport = ()=><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>;
 
+  // Returns nearest Friday (this Friday if today is Mon-Fri, next Friday if Sat/Sun)
+  const getNearestFriday = () => {
+    const d = new Date();
+    const day = d.getDay(); // 0=Sun,1=Mon,...,6=Sat
+    const daysToFriday = day <= 5 ? (5 - day) : (6); // if Sun=0 go 6 days, if Sat=6 go 6 days
+    d.setDate(d.getDate() + daysToFriday);
+    return d.toLocaleDateString('en-AU', {day:'2-digit',month:'2-digit',year:'numeric'}).replace(///g,'/');
+  };
+
 function App() {
   const [tab, setTab]           = useState("plan");
   const [phase, setPhase]       = useState(1);
@@ -155,6 +164,12 @@ function App() {
   const [expandedId, setExpandedId]=useState(null);
   const [editNoteId, setEditNoteId]=useState(null);
   const [rpt, setRpt]           = useState(()=>load(RKEY,{highlights:"",blockers:"",nextWeek:"",weekEnding:""}));
+
+  React.useEffect(() => {
+    if (!rpt.weekEnding) {
+      updateRpt('weekEnding', getNearestFriday());
+    }
+  }, []);
   const printContentRef = useRef(null);
 
   const persist = useCallback((o,i,sd)=>{
@@ -229,37 +244,99 @@ function App() {
     if (!emailTo) { setEmailStatus('error:Please enter a recipient email address.'); return; }
     const phaseNames = {1:'Days 1-30 (Earn the Right)',2:'Days 31-60 (Surface Clarity)',3:'Days 61-90 (Align Direction)'};
     const allObjs = Object.entries(objs).flatMap(([pid,items])=>items.map(o=>({...o,phase:phaseNames[pid]})));
-    const dayNum = startDate ? Math.min(90,Math.max(1,Math.floor((new Date()-new Date(startDate))/86400000)+1)) : '\u2014';
-    const weekEnd = rpt.weekEnding || new Date().toLocaleDateString('en-AU');
-    const si = {complete:'[Complete]',in_progress:'[In Progress]',blocked:'[Blocked]',not_started:'[Not Started]'};
+    const done    = allObjs.filter(o=>o.status==='complete');
+    const active  = allObjs.filter(o=>o.status==='in_progress');
+    const blocked = allObjs.filter(o=>o.status==='blocked');
+    const dayNum  = startDate ? Math.min(90,Math.max(1,Math.floor((new Date()-new Date(startDate))/86400000)+1)) : '\u2014';
+    const weekEnd = rpt.weekEnding || getNearestFriday();
+    const sc = {complete:'#006241',in_progress:'#b8860b',blocked:'#c0392b',not_started:'#aaa'};
+    const sl = {complete:'Complete',in_progress:'In Progress',blocked:'Blocked',not_started:'Not Started'};
+
+    const rows = allObjs.map((o,i) =>
+      '<tr style="background:' + (i%2===0?'#f5faf7':'#ffffff') + '">' +
+      '<td style="padding:6px 10px;font-size:11px;color:#555;border-bottom:1px solid #e8e8e8;">' + o.phase + '</td>' +
+      '<td style="padding:6px 10px;font-size:12px;border-bottom:1px solid #e8e8e8;">' + o.text + '</td>' +
+      '<td style="padding:6px 10px;font-size:11px;font-weight:700;color:' + (sc[o.status]||'#aaa') + ';border-bottom:1px solid #e8e8e8;white-space:nowrap;">' + (sl[o.status]||o.status) + '</td>' +
+      '</tr>'
+    ).join('');
+
+    const phases = [1,2,3].map(pid => {
+      const p = objs[pid]||[]; const d = p.filter(o=>o.status==='complete').length;
+      const pct = p.length ? Math.round(d/p.length*100) : 0;
+      return '<td style="width:33%;padding:12px;text-align:center;"><div style="font-size:10px;font-weight:700;letter-spacing:1px;color:#006241;margin-bottom:4px;">' + phaseNames[pid] + '</div><div style="font-size:24px;font-weight:900;color:#3dbe7a;">' + pct + '%</div><div style="font-size:11px;color:#666;">' + d + '/' + (p.length) + ' complete</div></td>';
+    }).join('');
+
+    const today = new Date().toLocaleDateString('en-AU',{day:'2-digit',month:'long',year:'numeric'});
     const subject = 'CBRE GWS Local VIC \u00b7 BUD Weekly Update \u00b7 Week Ending ' + weekEnd + ' (Day ' + dayNum + ' of 90)';
-    const body = [
-      'CBRE GWS LOCAL \u00b7 VICTORIA',
-      'Business Unit Director \u00b7 Weekly Update',
-      'Week Ending: ' + weekEnd + ' | Day ' + dayNum + ' of 90',
-      '',
-      'PROGRESS / HIGHLIGHTS',
-      '----------------------------------------',
-      rpt.highlights || '\u2014',
-      '',
-      'BLOCKERS / RISKS',
-      '----------------------------------------',
-      rpt.blockers || '\u2014',
-      '',
-      'NEXT WEEK PRIORITIES',
-      '----------------------------------------',
-      rpt.nextWeek || '\u2014',
-      '',
-      'OBJECTIVE STATUS',
-      '----------------------------------------',
-      ...allObjs.map(o => (si[o.status]||'') + ' ' + o.phase + ': ' + o.text),
-      '',
-      '----------------------------------------',
-      'CBRE GWS Local \u00b7 Victoria | Confidential',
-      'Generated ' + new Date().toLocaleDateString('en-AU',{day:'2-digit',month:'long',year:'numeric'})
-    ].join('\n');
-    const gmailUrl = 'https://mail.google.com/mail/?view=cm&to=' + encodeURIComponent(emailTo) + '&su=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
-    window.open(gmailUrl, '_blank');
+
+    const htmlBody =
+      '<div style="font-family:Arial,sans-serif;max-width:680px;margin:0 auto;color:#1a1a1a;">' +
+      '<div style="background:#006241;padding:22px 28px;">' +
+        '<table style="width:100%;border-collapse:collapse;"><tr>' +
+          '<td style="vertical-align:middle;">' +
+            '<span style="background:#3dbe7a;color:#0b1f14;font-weight:900;font-size:15px;padding:5px 12px;border-radius:2px;letter-spacing:2px;margin-right:14px;">CBRE</span>' +
+            '<span style="color:white;font-size:18px;font-weight:700;letter-spacing:1px;vertical-align:middle;">GWS LOCAL \u00b7 VICTORIA</span>' +
+            '<div style="color:rgba(255,255,255,0.75);font-size:10px;letter-spacing:2px;margin-top:4px;padding-left:2px;">BUSINESS UNIT DIRECTOR \u00b7 WEEKLY UPDATE</div>' +
+          '</td>' +
+          '<td style="text-align:right;vertical-align:middle;color:white;font-size:12px;line-height:1.8;">' +
+            '<strong>Week Ending</strong><br/>' + weekEnd + '<br/>Day ' + dayNum + ' of 90' +
+          '</td>' +
+        '</tr></table>' +
+      '</div>' +
+      (rpt.highlights ?
+        '<div style="padding:20px 28px 0;">' +
+          '<div style="font-size:10px;font-weight:700;letter-spacing:2px;color:#006241;border-bottom:2px solid #3dbe7a;padding-bottom:4px;margin-bottom:10px;">PROGRESS / HIGHLIGHTS</div>' +
+          '<div style="font-size:13px;line-height:1.8;white-space:pre-wrap;">' + rpt.highlights + '</div>' +
+        '</div>' : '') +
+      (rpt.blockers ?
+        '<div style="padding:16px 28px 0;">' +
+          '<div style="font-size:10px;font-weight:700;letter-spacing:2px;color:#006241;border-bottom:2px solid #3dbe7a;padding-bottom:4px;margin-bottom:10px;">BLOCKERS / RISKS</div>' +
+          '<div style="font-size:13px;line-height:1.8;white-space:pre-wrap;">' + rpt.blockers + '</div>' +
+        '</div>' : '') +
+      (rpt.nextWeek ?
+        '<div style="padding:16px 28px 0;">' +
+          '<div style="font-size:10px;font-weight:700;letter-spacing:2px;color:#006241;border-bottom:2px solid #3dbe7a;padding-bottom:4px;margin-bottom:10px;">NEXT WEEK PRIORITIES</div>' +
+          '<div style="font-size:13px;line-height:1.8;white-space:pre-wrap;">' + rpt.nextWeek + '</div>' +
+        '</div>' : '') +
+      '<div style="padding:16px 28px 0;">' +
+        '<div style="font-size:10px;font-weight:700;letter-spacing:2px;color:#006241;border-bottom:2px solid #3dbe7a;padding-bottom:4px;margin-bottom:10px;">OBJECTIVE STATUS</div>' +
+        '<table style="width:100%;border-collapse:collapse;font-size:12px;">' +
+          '<tr style="background:#006241;color:white;">' +
+            '<th style="padding:7px 10px;text-align:left;font-size:10px;letter-spacing:1px;font-weight:700;">Phase</th>' +
+            '<th style="padding:7px 10px;text-align:left;font-size:10px;letter-spacing:1px;font-weight:700;">Objective</th>' +
+            '<th style="padding:7px 10px;text-align:left;font-size:10px;letter-spacing:1px;font-weight:700;">Status</th>' +
+          '</tr>' + rows +
+        '</table>' +
+      '</div>' +
+      '<div style="padding:16px 28px 20px;">' +
+        '<div style="font-size:10px;font-weight:700;letter-spacing:2px;color:#006241;border-bottom:2px solid #3dbe7a;padding-bottom:4px;margin-bottom:10px;">PHASE PROGRESS</div>' +
+        '<table style="width:100%;border-collapse:collapse;"><tr>' + phases + '</tr></table>' +
+      '</div>' +
+      '<div style="background:#f0f0f0;padding:10px 28px;font-size:10px;color:#666;">' +
+        '<table style="width:100%;"><tr>' +
+          '<td>CBRE GWS Local \u00b7 Victoria</td>' +
+          '<td style="text-align:center;">Confidential \u00b7 Internal Use Only</td>' +
+          '<td style="text-align:right;">Generated ' + today + '</td>' +
+        '</tr></table>' +
+      '</div>' +
+      '</div>';
+
+    const gmailUrl = 'https://mail.google.com/mail/?view=cm&to=' + encodeURIComponent(emailTo) +
+      '&su=' + encodeURIComponent(subject) +
+      '&body=' + encodeURIComponent('Please view this email in an HTML-capable email client.') +
+      '&html=' + encodeURIComponent(htmlBody);
+
+    // Gmail compose URL supports ?html= for HTML body (falls back to text if too long)
+    // Use shorter URL for reliability, store HTML in sessionStorage for reference
+    sessionStorage.setItem('lastEmailHTML', htmlBody);
+    sessionStorage.setItem('lastEmailSubject', subject);
+
+    // Build the mailto URL with html - Gmail supports this via their compose API
+    const composeUrl = 'https://mail.google.com/mail/?view=cm&to=' + encodeURIComponent(emailTo) +
+      '&su=' + encodeURIComponent(subject) +
+      '&tf=1' +
+      '&body=' + encodeURIComponent(htmlBody);
+    window.open(composeUrl, '_blank');
     setEmailStatus('sent');
   };
 
