@@ -190,32 +190,28 @@ function App() {
     setAiDrafting(true);
     setAiError('');
     try {
-      const phaseNames = {1:'Days 1–30 (Earn the Right)',2:'Days 31–60 (Surface Clarity)',3:'Days 61–90 (Align Direction)'};
+      const phaseNames = {1:'Days 1-30 (Earn the Right)',2:'Days 31-60 (Surface Clarity)',3:'Days 61-90 (Align Direction)'};
       const allObjs = Object.entries(objs).flatMap(([pid,items])=>items.map(o=>({...o,phase:phaseNames[pid]})));
       const done    = allObjs.filter(o=>o.status==='complete');
       const active  = allObjs.filter(o=>o.status==='in_progress');
       const blocked = allObjs.filter(o=>o.status==='blocked');
-      const dayNum  = (()=>{if(!startDate)return null;const d=Math.floor((new Date()-new Date(startDate))/86400000)+1;return d<1?0:d>90?90:d;})();
+      const dayNum  = (()=>{ if(!startDate) return null; const d=Math.floor((new Date()-new Date(startDate))/86400000)+1; return d<1?1:d>90?90:d; })();
 
-      // Build Highlights
       let hi = [];
-      if(dayNum) hi.push(`• Day ${dayNum} of 90 — ${done.length}/${allObjs.length} objectives complete across the 90-day plan.`);
-      done.forEach(o=> hi.push(`• ${o.text}${o.notes?' — '+o.notes:''}`));
-      intel.slice(0,3).forEach(i=> hi.push(`• ${i.text}`));
-      if(active.length>0) hi.push(`• ${active.length} objective${active.length>1?'s':''} actively in progress: ${active.map(o=>o.text.split('—')[0].trim()).join('; ')}.`);
-      if(hi.length===0) hi.push('• No significant updates this week.');
+      if(dayNum) hi.push('\u2022 Day ' + dayNum + ' of 90 \u2014 ' + done.length + '/' + allObjs.length + ' objectives complete across the 90-day plan.');
+      done.forEach(o => hi.push('\u2022 Completed: ' + o.text + (o.notes ? ' \u2014 ' + o.notes : '')));
+      intel.slice(0,3).forEach(i => hi.push('\u2022 ' + i.text));
+      if(active.length>0) hi.push('\u2022 ' + active.length + ' objective' + (active.length>1?'s':'') + ' actively in progress: ' + active.map(o=>o.text.split('\u2014')[0].trim()).join('; ') + '.');
+      if(hi.length===0) hi.push('\u2022 No significant updates this week.');
 
-      // Build Blockers
       let bl = [];
-      blocked.forEach(o=> bl.push(`• ${o.text}${o.notes?' — '+o.notes:''}`));
+      blocked.forEach(o => bl.push('\u2022 ' + o.text + (o.notes ? ' \u2014 ' + o.notes : '')));
       if(bl.length===0) bl.push('No blockers this week.');
 
-      // Build Next Week
       let nw = [];
-      active.forEach(o=> nw.push(`• Continue: ${o.text.split('—')[0].trim()}`));
-      const notStarted = allObjs.filter(o=>o.status==='not_started').slice(0,3-active.length);
-      notStarted.forEach(o=> nw.push(`• Begin: ${o.text.split('—')[0].trim()}`));
-      if(nw.length===0) nw.push('• Review overall plan progress and adjust priorities.');
+      active.forEach(o => nw.push('\u2022 Continue: ' + o.text.split('\u2014')[0].trim()));
+      allObjs.filter(o=>o.status==='not_started').slice(0, Math.max(0,3-active.length)).forEach(o => nw.push('\u2022 Begin: ' + o.text.split('\u2014')[0].trim()));
+      if(nw.length===0) nw.push('\u2022 Review overall plan progress and adjust priorities.');
 
       updateRpt('highlights', hi.join('\n'));
       updateRpt('blockers',   bl.join('\n'));
@@ -267,9 +263,78 @@ function App() {
   const act=allO.filter(o=>o.status==="in_progress").length, blk=allO.filter(o=>o.status==="blocked").length;
   const day=dayN(), ph=PHASES.find(p=>p.id===phase);
 
-  const printReport = ()=>{
-    const el=printContentRef.current; if(!el)return;
-    document.getElementById("print-root").innerHTML=el.innerHTML;
+  const printReport = () => {
+    const phaseNames = {1:'Days 1-30 (Earn the Right)',2:'Days 31-60 (Surface Clarity)',3:'Days 61-90 (Align Direction)'};
+    const allObjs = Object.entries(objs).flatMap(([pid,items])=>items.map(o=>({...o,phase:phaseNames[pid],pid:Number(pid)})));
+    const done = allObjs.filter(o=>o.status==='complete').length;
+    const total = allObjs.length;
+    const phasePct = (pid) => {
+      const p = objs[pid]||[]; const d=p.filter(o=>o.status==='complete').length;
+      return p.length ? Math.round(d/p.length*100) : 0;
+    };
+    const statusLabel = {complete:'Complete',in_progress:'In Progress',blocked:'Blocked',not_started:'Not Started'};
+    const statusColor = {complete:'#006241',in_progress:'#b8860b',blocked:'#c0392b',not_started:'#888'};
+    const today = new Date().toLocaleDateString('en-AU',{day:'2-digit',month:'long',year:'numeric'});
+    const dayNum = startDate ? Math.min(90,Math.max(1,Math.floor((new Date()-new Date(startDate))/86400000)+1)) : '—';
+    
+    const el = document.getElementById('print-root');
+    el.innerHTML = `
+      <div style="font-family:Arial,sans-serif;color:#1a1a1a;max-width:800px;margin:0 auto;">
+        <div style="background:#006241;color:white;padding:24px 32px 20px;display:flex;align-items:center;justify-content:space-between;">
+          <div style="display:flex;align-items:center;gap:16px;">
+            <div style="background:#3dbe7a;color:#0b1f14;font-weight:900;font-size:16px;padding:6px 14px;letter-spacing:2px;border-radius:2px;">CBRE</div>
+            <div>
+              <div style="font-size:20px;font-weight:700;letter-spacing:1px;">GWS LOCAL · VICTORIA</div>
+              <div style="font-size:11px;opacity:0.8;letter-spacing:2px;margin-top:2px;">BUSINESS UNIT DIRECTOR · 90-DAY ONBOARDING</div>
+            </div>
+          </div>
+          <div style="text-align:right;font-size:11px;opacity:0.85;line-height:1.8;">
+            <div><strong>Week Ending</strong></div>
+            <div>${rpt.weekEnding||today}</div>
+            <div>Day ${dayNum} of 90</div>
+          </div>
+        </div>
+        <div style="padding:28px 32px;">
+          <div style="margin-bottom:22px;">
+            <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#006241;border-bottom:2px solid #3dbe7a;padding-bottom:4px;margin-bottom:10px;">Progress / Highlights</div>
+            <div style="font-size:13px;line-height:1.8;white-space:pre-wrap;">${rpt.highlights||'—'}</div>
+          </div>
+          <div style="margin-bottom:22px;">
+            <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#006241;border-bottom:2px solid #3dbe7a;padding-bottom:4px;margin-bottom:10px;">Blockers / Risks</div>
+            <div style="font-size:13px;line-height:1.8;white-space:pre-wrap;">${rpt.blockers||'—'}</div>
+          </div>
+          <div style="margin-bottom:22px;">
+            <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#006241;border-bottom:2px solid #3dbe7a;padding-bottom:4px;margin-bottom:10px;">Next Week Priorities</div>
+            <div style="font-size:13px;line-height:1.8;white-space:pre-wrap;">${rpt.nextWeek||'—'}</div>
+          </div>
+          <div style="margin-bottom:8px;">
+            <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#006241;border-bottom:2px solid #3dbe7a;padding-bottom:4px;margin-bottom:10px;">Objective Status — All Phases</div>
+            <table style="width:100%;border-collapse:collapse;font-size:12px;">
+              <thead><tr style="background:#006241;color:white;">
+                <th style="padding:7px 10px;text-align:left;font-size:10px;letter-spacing:1px;">Phase</th>
+                <th style="padding:7px 10px;text-align:left;font-size:10px;letter-spacing:1px;">Objective</th>
+                <th style="padding:7px 10px;text-align:left;font-size:10px;letter-spacing:1px;">Status</th>
+              </tr></thead>
+              <tbody>${allObjs.map((o,i)=>`<tr style="background:${i%2===0?'#f5faf7':'white'}">
+                <td style="padding:6px 10px;border-bottom:1px solid #e0e0e0;font-size:11px;color:#555;">${o.phase}</td>
+                <td style="padding:6px 10px;border-bottom:1px solid #e0e0e0;">${o.text}</td>
+                <td style="padding:6px 10px;border-bottom:1px solid #e0e0e0;font-weight:600;color:${statusColor[o.status]||'#888'};">${statusLabel[o.status]||o.status}</td>
+              </tr>`).join('')}</tbody>
+            </table>
+          </div>
+          <div style="display:flex;gap:12px;margin-top:16px;">
+            ${[1,2,3].map(pid=>`<div style="flex:1;background:#f5faf7;border:1px solid #c8e6c9;border-radius:4px;padding:10px 14px;">
+              <div style="font-size:10px;font-weight:700;letter-spacing:1px;color:#006241;margin-bottom:4px;">${phaseNames[pid]}</div>
+              <div style="font-size:22px;font-weight:900;color:#3dbe7a;">${phasePct(pid)}%</div>
+            </div>`).join('')}
+          </div>
+        </div>
+        <div style="background:#f0f0f0;padding:10px 32px;font-size:10px;color:#666;display:flex;justify-content:space-between;">
+          <span>CBRE GWS Local · Victoria</span>
+          <span>Confidential · Internal Use Only</span>
+          <span>Generated ${today}</span>
+        </div>
+      </div>`;
     window.print();
   };
 
