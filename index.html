@@ -169,8 +169,11 @@ function App() {
   const [rpt, setRpt]           = useState(()=>load(RKEY,{highlights:"",blockers:"",nextWeek:"",weekEnding:""}));
 
   React.useEffect(() => {
-    if (!rpt.weekEnding) {
-      updateRpt('weekEnding', getNearestFriday());
+    // Auto-set week ending to nearest Friday if not already set
+    const stored = JSON.parse(localStorage.getItem('cbre_rpt_v1') || '{}');
+    if (!stored.weekEnding) {
+      const friday = getNearestFriday();
+      updateRpt('weekEnding', friday);
     }
   }, []);
   const printContentRef = useRef(null);
@@ -252,6 +255,7 @@ function App() {
     const blocked = allObjs.filter(o=>o.status==='blocked');
     const dayNum  = startDate ? Math.min(90,Math.max(1,Math.floor((new Date()-new Date(startDate))/86400000)+1)) : '\u2014';
     const weekEnd = rpt.weekEnding || getNearestFriday();
+    // weekEnd is already DD/MM/YYYY format — use directly
     const sc = {complete:'#006241',in_progress:'#b8860b',blocked:'#c0392b',not_started:'#aaa'};
     const sl = {complete:'Complete',in_progress:'In Progress',blocked:'Blocked',not_started:'Not Started'};
 
