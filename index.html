@@ -162,6 +162,51 @@ const IcoReport = ()=><svg width="19" height="19" viewBox="0 0 24 24" fill="none
     return p.length === 3 ? p[2] + '/' + p[1] + '/' + p[0] : iso;
   };
 
+function EmailPanel({C, btnG, objs, rpt, startDate, fmtDate, getNearestFriday}) {
+  const [emailStatus, setEmailStatus] = React.useState('');
+  const emailRef = React.useRef(null);
+
+  const sendEmail = () => {
+    const emailToVal = emailRef.current ? emailRef.current.value.trim() : '';
+    if (!emailToVal) { setEmailStatus('error:Please enter a recipient email address.'); return; }
+    const pNames = {1:'Days 1-30 · Earn the Right',2:'Days 31-60 · Surface Clarity',3:'Days 61-90 · Align Direction'};
+    const allObjs = Object.entries(objs).flatMap(([pid,items])=>items.map(o=>({...o,phase:pNames[pid]})));
+    const dayNum  = startDate ? Math.min(90,Math.max(1,Math.floor((new Date()-new Date(startDate))/86400000)+1)) : '—';
+    const weekEnd = fmtDate(rpt.weekEnding || getNearestFriday());
+    const today   = new Date().toLocaleDateString('en-AU',{day:'2-digit',month:'long',year:'numeric'});
+    const sBg  = {complete:'#006241',in_progress:'#b45309',blocked:'#b91c1c',not_started:'#6b7280'};
+    const sTxt = {complete:'Complete',in_progress:'In Progress',blocked:'Blocked',not_started:'Not Started'};
+    const phases = [1,2,3].map(pid => {
+      const p = objs[pid]||[]; const d = p.filter(o=>o.status==='complete').length;
+      const pct = p.length ? Math.round(d/p.length*100) : 0; const barW = Math.max(2,pct);
+      return '<td width="33%" style="padding:0 8px;vertical-align:top;"><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-bottom:6px;"><div style="font-size:10px;font-weight:700;letter-spacing:1px;color:#3dbe7a;text-transform:uppercase;">'+pNames[pid]+'</div></td></tr><tr><td><div style="font-size:28px;font-weight:900;color:#3dbe7a;line-height:1;">'+pct+'%</div><div style="font-size:11px;color:#aaa;margin-bottom:6px;">'+d+' of '+p.length+' complete</div><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td width="'+barW+'%" style="background:#3dbe7a;height:6px;border-radius:3px 0 0 3px;"></td><td width="'+(100-barW)+'%" style="background:#1a4a2e;height:6px;border-radius:0 3px 3px 0;"></td></tr></table></td></tr></table></td>';
+    }).join('');
+    const objRows = allObjs.map((o,i) =>
+      '<tr style="background:'+(i%2===0?'#f5faf7':'#ffffff')+';"><td style="padding:8px 12px;font-size:11px;color:#555;border-bottom:1px solid #e2e8e4;white-space:nowrap;">'+o.phase+'</td><td style="padding:8px 12px;font-size:12px;color:#1a1a1a;border-bottom:1px solid #e2e8e4;">'+o.text+'</td><td style="padding:8px 12px;border-bottom:1px solid #e2e8e4;text-align:center;white-space:nowrap;"><span style="display:inline-block;background:'+(sBg[o.status]||'#6b7280')+';color:#fff;font-size:10px;font-weight:700;padding:3px 8px;border-radius:3px;">'+(sTxt[o.status]||o.status)+'</span></td></tr>'
+    ).join('');
+    const section = (title,content) => content ? '<tr><td style="padding:0 28px 20px;"><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-bottom:10px;border-bottom:2px solid #3dbe7a;"><span style="font-size:10px;font-weight:700;letter-spacing:2px;color:#006241;text-transform:uppercase;">'+title+'</span></td></tr><tr><td style="padding-top:10px;font-size:13px;color:#333;line-height:1.8;white-space:pre-wrap;">'+content+'</td></tr></table></td></tr>' : '';
+    const subject = 'CBRE GWS Local VIC · BUD Weekly Update · Week Ending '+weekEnd+' (Day '+dayNum+' of 90)';
+    const emailHTML = '<!DOCTYPE html><html><body style="margin:0;padding:20px;background:#f0f2f0;font-family:Arial,Helvetica,sans-serif;"><table width="680" cellpadding="0" cellspacing="0" border="0" style="margin:0 auto;background:#ffffff;border-radius:4px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.12);"><tr><td style="background:#006241;padding:0;"><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding:22px 28px;vertical-align:middle;"><table cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right:14px;vertical-align:middle;"><div style="background:#3dbe7a;display:inline-block;padding:6px 14px;border-radius:2px;"><span style="font-size:15px;font-weight:900;color:#0b1f14;letter-spacing:3px;">CBRE</span></div></td><td style="vertical-align:middle;border-left:1px solid rgba(255,255,255,0.3);padding-left:14px;"><div style="font-size:17px;font-weight:700;color:#ffffff;letter-spacing:1px;">GWS LOCAL · VICTORIA</div><div style="font-size:10px;color:rgba(255,255,255,0.7);letter-spacing:2px;margin-top:3px;">BUSINESS UNIT DIRECTOR · WEEKLY UPDATE</div></td></tr></table></td><td style="padding:22px 28px;text-align:right;vertical-align:middle;"><div style="color:rgba(255,255,255,0.7);font-size:10px;letter-spacing:1px;text-transform:uppercase;">Week Ending</div><div style="color:#3dbe7a;font-size:18px;font-weight:700;margin-top:2px;">'+weekEnd+'</div><div style="color:rgba(255,255,255,0.6);font-size:11px;margin-top:4px;background:rgba(0,0,0,0.2);display:inline-block;padding:2px 10px;border-radius:10px;">Day '+dayNum+' of 90</div></td></tr></table></td></tr><tr><td style="background:#0b1f14;padding:16px 20px;"><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>'+phases+'</tr></table></td></tr><tr><td style="height:24px;"></td></tr>'+section('Progress / Highlights',rpt.highlights)+section('Blockers / Risks',rpt.blockers)+section('Next Week Priorities',rpt.nextWeek)+'<tr><td style="padding:0 28px 24px;"><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-bottom:10px;border-bottom:2px solid #3dbe7a;"><span style="font-size:10px;font-weight:700;letter-spacing:2px;color:#006241;text-transform:uppercase;">Objective Status</span></td></tr><tr><td style="padding-top:10px;"><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr style="background:#006241;"><th style="padding:8px 12px;text-align:left;font-size:10px;font-weight:700;color:#fff;letter-spacing:1px;text-transform:uppercase;white-space:nowrap;">Phase</th><th style="padding:8px 12px;text-align:left;font-size:10px;font-weight:700;color:#fff;letter-spacing:1px;text-transform:uppercase;">Objective</th><th style="padding:8px 12px;text-align:center;font-size:10px;font-weight:700;color:#fff;letter-spacing:1px;text-transform:uppercase;white-space:nowrap;">Status</th></tr>'+objRows+'</table></td></tr></table></td></tr><tr><td style="background:#006241;padding:12px 28px;"><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="font-size:11px;color:rgba(255,255,255,0.8);">CBRE GWS Local · Victoria</td><td style="font-size:11px;color:rgba(255,255,255,0.6);text-align:center;">Confidential · Internal Use Only</td><td style="font-size:11px;color:rgba(255,255,255,0.8);text-align:right;">Generated '+today+'</td></tr></table></td></tr></table></body></html>';
+    const gmailUrl = 'https://mail.google.com/mail/?view=cm&to='+encodeURIComponent(emailToVal)+'&su='+encodeURIComponent(subject)+'&body='+encodeURIComponent(emailHTML);
+    window.open(gmailUrl,'_blank');
+    setEmailStatus('sent');
+  };
+
+  return (
+    <div style={{marginTop:"16px",borderTop:"1px solid "+C.border,paddingTop:"16px"}}>
+      <div style={{fontSize:"10px",fontWeight:700,letterSpacing:"2px",color:C.muted,marginBottom:"8px"}}>SEND WEEKLY EMAIL</div>
+      <input ref={emailRef} type="email" placeholder="Recipient email address..."
+        style={{width:"100%",background:C.card,border:"1px solid "+C.border,color:C.text,padding:"10px 12px",fontSize:"13px",borderRadius:"4px",boxSizing:"border-box",marginBottom:"8px",fontFamily:"monospace"}}/>
+      <button onClick={sendEmail} style={{...btnG,marginBottom:"6px"}}>📧 OPEN IN GMAIL</button>
+      <div style={{minHeight:"22px",textAlign:"center",marginTop:"4px"}}>
+        {emailStatus==='sent' && <span style={{color:C.green,fontSize:"12px",fontWeight:700}}>✅ Gmail compose opened — review and hit Send!</span>}
+        {emailStatus.startsWith('error:') && <span style={{color:"#c0392b",fontSize:"12px"}}>⚠️ {emailStatus.replace('error:','')}</span>}
+      </div>
+      <div style={{fontSize:"11px",color:C.muted,textAlign:"center",marginTop:"4px",fontStyle:"italic"}}>Opens Gmail compose with full branded report</div>
+    </div>
+  );
+}
+
 function App() {
   const [tab, setTab]           = useState("plan");
   const [phase, setPhase]       = useState(1);
@@ -204,10 +249,7 @@ function App() {
 
   const [aiDrafting, setAiDrafting] = React.useState(false);
   const [aiError, setAiError] = React.useState('');
-  const [emailTo, setEmailTo] = React.useState('');
-  const emailInputRef = React.useRef(null);
-  const [emailSending, setEmailSending] = React.useState(false);
-  const [emailStatus, setEmailStatus] = React.useState('');
+  // email state moved to EmailPanel component
 
   const aiDraftReport = () => {
     setAiDrafting(true);
@@ -245,151 +287,8 @@ function App() {
     setAiDrafting(false);
   };
 
-  const sendWeeklyEmail = () => {
-    const emailToVal = emailInputRef.current ? emailInputRef.current.value : emailTo;
-    if (!emailToVal) { setEmailStatus('error:Please enter a recipient email address.'); return; }
-    const pNames = {1:'Days 1-30 · Earn the Right',2:'Days 31-60 · Surface Clarity',3:'Days 61-90 · Align Direction'};
-    const allObjs = Object.entries(objs).flatMap(([pid,items])=>items.map(o=>({...o,phase:pNames[pid]})));
-    const done    = allObjs.filter(o=>o.status==='complete');
-    const active  = allObjs.filter(o=>o.status==='in_progress');
-    const blocked = allObjs.filter(o=>o.status==='blocked');
-    const dayNum  = startDate ? Math.min(90,Math.max(1,Math.floor((new Date()-new Date(startDate))/86400000)+1)) : '—';
-    const weekEnd = fmtDate(rpt.weekEnding || getNearestFriday());
-    const today   = new Date().toLocaleDateString('en-AU',{day:'2-digit',month:'long',year:'numeric'});
+  // sendWeeklyEmail moved to EmailPanel
 
-    // Status badge colours and labels
-    const sBg  = {complete:'#006241',in_progress:'#b45309',blocked:'#b91c1c',not_started:'#6b7280'};
-    const sTxt = {complete:'Complete',in_progress:'In Progress',blocked:'Blocked',not_started:'Not Started'};
-
-    // Phase progress bars
-    const phases = [1,2,3].map(pid => {
-      const p = objs[pid]||[];
-      const d = p.filter(o=>o.status==='complete').length;
-      const pct = p.length ? Math.round(d/p.length*100) : 0;
-      const barW = Math.max(2, pct);
-      return (
-        '<td width="33%" style="padding:0 8px;vertical-align:top;">' +
-          '<table width="100%" cellpadding="0" cellspacing="0" border="0">' +
-            '<tr><td style="padding-bottom:6px;">' +
-              '<div style="font-size:10px;font-weight:700;letter-spacing:1px;color:#006241;text-transform:uppercase;">' + pNames[pid] + '</div>' +
-            '</td></tr>' +
-            '<tr><td>' +
-              '<div style="font-size:28px;font-weight:900;color:#3dbe7a;line-height:1;">' + pct + '%</div>' +
-              '<div style="font-size:11px;color:#555;margin-bottom:6px;">' + d + ' of ' + p.length + ' complete</div>' +
-              '<table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>' +
-                '<td width="' + barW + '%" style="background:#3dbe7a;height:6px;border-radius:3px 0 0 3px;"></td>' +
-                '<td width="' + (100-barW) + '%" style="background:#e2e8e4;height:6px;border-radius:0 3px 3px 0;"></td>' +
-              '</tr></table>' +
-            '</td></tr>' +
-          '</table>' +
-        '</td>'
-      );
-    }).join('');
-
-    // Objectives rows
-    const objRows = allObjs.map((o,i) =>
-      '<tr style="background:' + (i%2===0?'#f5faf7':'#ffffff') + ';">' +
-        '<td style="padding:8px 12px;font-size:11px;color:#555;border-bottom:1px solid #e2e8e4;white-space:nowrap;">' + o.phase + '</td>' +
-        '<td style="padding:8px 12px;font-size:12px;color:#1a1a1a;border-bottom:1px solid #e2e8e4;">' + o.text + '</td>' +
-        '<td style="padding:8px 12px;border-bottom:1px solid #e2e8e4;text-align:center;white-space:nowrap;">' +
-          '<span style="display:inline-block;background:' + (sBg[o.status]||'#6b7280') + ';color:#ffffff;font-size:10px;font-weight:700;letter-spacing:0.5px;padding:3px 8px;border-radius:3px;">' +
-            (sTxt[o.status]||o.status) +
-          '</span>' +
-        '</td>' +
-      '</tr>'
-    ).join('');
-
-    // Section builder helper
-    const section = (title, content) =>
-      '<tr><td style="padding:0 28px 20px;">' +
-        '<table width="100%" cellpadding="0" cellspacing="0" border="0">' +
-          '<tr><td style="padding-bottom:10px;border-bottom:2px solid #3dbe7a;">' +
-            '<span style="font-size:10px;font-weight:700;letter-spacing:2px;color:#006241;text-transform:uppercase;">' + title + '</span>' +
-          '</td></tr>' +
-          '<tr><td style="padding-top:10px;font-size:13px;color:#333;line-height:1.8;white-space:pre-wrap;">' + (content||'') + '</td></tr>' +
-        '</table>' +
-      '</td></tr>';
-
-    const subject = 'CBRE GWS Local VIC · BUD Weekly Update · Week Ending ' + weekEnd + ' (Day ' + dayNum + ' of 90)';
-
-    const emailHTML =
-      '<!DOCTYPE html><html><body style="margin:0;padding:20px;background:#f0f2f0;font-family:Arial,Helvetica,sans-serif;">' +
-      '<table width="680" cellpadding="0" cellspacing="0" border="0" style="margin:0 auto;background:#ffffff;border-radius:4px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.12);">' +
-
-      // ── HEADER ──
-      '<tr><td style="background:#006241;padding:0;">' +
-        '<table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>' +
-          '<td style="padding:22px 28px;vertical-align:middle;">' +
-            '<table cellpadding="0" cellspacing="0" border="0"><tr>' +
-              '<td style="padding-right:14px;vertical-align:middle;">' +
-                '<div style="background:#3dbe7a;display:inline-block;padding:6px 14px;border-radius:2px;">' +
-                  '<span style="font-size:15px;font-weight:900;color:#0b1f14;letter-spacing:3px;">CBRE</span>' +
-                '</div>' +
-              '</td>' +
-              '<td style="vertical-align:middle;border-left:1px solid rgba(255,255,255,0.3);padding-left:14px;">' +
-                '<div style="font-size:17px;font-weight:700;color:#ffffff;letter-spacing:1px;">GWS LOCAL · VICTORIA</div>' +
-                '<div style="font-size:10px;color:rgba(255,255,255,0.7);letter-spacing:2px;margin-top:3px;">BUSINESS UNIT DIRECTOR · WEEKLY UPDATE</div>' +
-              '</td>' +
-            '</tr></table>' +
-          '</td>' +
-          '<td style="padding:22px 28px;text-align:right;vertical-align:middle;">' +
-            '<div style="color:rgba(255,255,255,0.7);font-size:10px;letter-spacing:1px;text-transform:uppercase;">Week Ending</div>' +
-            '<div style="color:#3dbe7a;font-size:18px;font-weight:700;margin-top:2px;">' + weekEnd + '</div>' +
-            '<div style="color:rgba(255,255,255,0.6);font-size:11px;margin-top:4px;background:rgba(0,0,0,0.2);display:inline-block;padding:2px 10px;border-radius:10px;">Day ' + dayNum + ' of 90</div>' +
-          '</td>' +
-        '</tr></table>' +
-      '</td></tr>' +
-
-      // ── PHASE PROGRESS ──
-      '<tr><td style="background:#0b1f14;padding:16px 20px;">' +
-        '<table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>' + phases + '</tr></table>' +
-      '</td></tr>' +
-
-      // ── SPACER ──
-      '<tr><td style="height:24px;"></td></tr>' +
-
-      // ── REPORT SECTIONS ──
-      (rpt.highlights ? section('Progress / Highlights', rpt.highlights) : '') +
-      (rpt.blockers   ? section('Blockers / Risks', rpt.blockers) : '') +
-      (rpt.nextWeek   ? section('Next Week Priorities', rpt.nextWeek) : '') +
-
-      // ── OBJECTIVES TABLE ──
-      '<tr><td style="padding:0 28px 24px;">' +
-        '<table width="100%" cellpadding="0" cellspacing="0" border="0">' +
-          '<tr><td style="padding-bottom:10px;border-bottom:2px solid #3dbe7a;">' +
-            '<span style="font-size:10px;font-weight:700;letter-spacing:2px;color:#006241;text-transform:uppercase;">Objective Status</span>' +
-          '</td></tr>' +
-          '<tr><td style="padding-top:10px;">' +
-            '<table width="100%" cellpadding="0" cellspacing="0" border="0">' +
-              '<tr style="background:#006241;">' +
-                '<th style="padding:8px 12px;text-align:left;font-size:10px;font-weight:700;color:#ffffff;letter-spacing:1px;text-transform:uppercase;white-space:nowrap;">Phase</th>' +
-                '<th style="padding:8px 12px;text-align:left;font-size:10px;font-weight:700;color:#ffffff;letter-spacing:1px;text-transform:uppercase;">Objective</th>' +
-                '<th style="padding:8px 12px;text-align:center;font-size:10px;font-weight:700;color:#ffffff;letter-spacing:1px;text-transform:uppercase;white-space:nowrap;">Status</th>' +
-              '</tr>' +
-              objRows +
-            '</table>' +
-          '</td></tr>' +
-        '</table>' +
-      '</td></tr>' +
-
-      // ── FOOTER ──
-      '<tr><td style="background:#006241;padding:12px 28px;">' +
-        '<table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>' +
-          '<td style="font-size:11px;color:rgba(255,255,255,0.8);">CBRE GWS Local · Victoria</td>' +
-          '<td style="font-size:11px;color:rgba(255,255,255,0.6);text-align:center;">Confidential · Internal Use Only</td>' +
-          '<td style="font-size:11px;color:rgba(255,255,255,0.8);text-align:right;">Generated ' + today + '</td>' +
-        '</tr></table>' +
-      '</td></tr>' +
-
-      '</table></body></html>';
-
-    const gmailUrl = 'https://mail.google.com/mail/?view=cm' +
-      '&to=' + encodeURIComponent(emailToVal) +
-      '&su=' + encodeURIComponent(subject) +
-      '&body=' + encodeURIComponent(emailHTML);
-    window.open(gmailUrl, '_blank');
-    setEmailStatus('sent');
-  };
 
   const setStatus = (pid,id,status)=>{
     const next={...objs,[pid]:objs[pid].map(o=>o.id===id?{...o,status}:o)};
@@ -696,23 +595,7 @@ function App() {
       {aiError && <div style={{color:C.risk,fontSize:"12px",marginBottom:"8px",fontFamily:"monospace"}}>{aiError}</div>}
       <div style={{fontSize:"11px",color:C.muted,textAlign:"center",marginBottom:"8px",fontStyle:"italic"}}>Reads your objectives & intel → drafts highlights, blockers & next week for you to review</div>
       <button onClick={printReport} style={{...btnG,marginTop:"4px",marginBottom:"6px"}}>🖨 PRINT / EXPORT PDF</button>
-      <div style={{marginTop:"16px",borderTop:"1px solid "+C.border,paddingTop:"16px"}}>
-        <div style={{fontSize:"10px",fontWeight:700,letterSpacing:"2px",color:C.muted,marginBottom:"8px"}}>SEND WEEKLY EMAIL</div>
-        <input
-          ref={emailInputRef}
-          type="email"
-          placeholder="Recipient email address..."
-          defaultValue={emailTo}
-          style={{width:"100%",background:C.card,border:"1px solid "+C.border,color:C.text,padding:"10px 12px",fontSize:"13px",borderRadius:"4px",boxSizing:"border-box",marginBottom:"8px",fontFamily:"monospace"}}/>
-        <button onClick={sendWeeklyEmail} disabled={emailSending} style={{...btnG,background:emailSending?"#1a5c38":C.green,opacity:emailSending?0.7:1,marginBottom:"6px"}}>
-          {'📧 OPEN IN GMAIL'}
-        </button>
-        <div style={{minHeight:"20px",marginTop:"4px",textAlign:"center"}}>
-          {emailStatus==='sent' && <span style={{color:C.green,fontSize:"12px",fontWeight:700}}>✅ Gmail compose opened — review and hit Send!</span>}
-          {emailStatus.startsWith('error:') && <span style={{color:C.risk,fontSize:"12px"}}>⚠️ {emailStatus.replace('error:','')}</span>}
-        </div>
-        <div style={{fontSize:"11px",color:C.muted,textAlign:"center",marginTop:"6px",fontStyle:"italic"}}>Opens Gmail compose with full report · Review and send from Gmail</div>
-      </div>
+      <EmailPanel C={C} btnG={btnG} objs={objs} rpt={rpt} startDate={startDate} fmtDate={fmtDate} getNearestFriday={getNearestFriday}/>
       <div style={{fontSize:"11px",color:C.muted,textAlign:"center",marginBottom:"20px",fontStyle:"italic"}}>Opens print dialog — save as PDF to share</div>
       <div style={lbl}>Preview</div>
       <div style={{background:C.card,border:`1px solid ${C.border}`,borderRadius:"3px",padding:"14px",fontSize:"13px",color:C.muted,lineHeight:"1.9"}}>
