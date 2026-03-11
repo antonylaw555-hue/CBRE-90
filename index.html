@@ -205,6 +205,7 @@ function App() {
   const [aiDrafting, setAiDrafting] = React.useState(false);
   const [aiError, setAiError] = React.useState('');
   const [emailTo, setEmailTo] = React.useState('');
+  const emailInputRef = React.useRef(null);
   const [emailSending, setEmailSending] = React.useState(false);
   const [emailStatus, setEmailStatus] = React.useState('');
 
@@ -245,7 +246,8 @@ function App() {
   };
 
   const sendWeeklyEmail = () => {
-    if (!emailTo) { setEmailStatus('error:Please enter a recipient email address.'); return; }
+    const emailToVal = emailInputRef.current ? emailInputRef.current.value : emailTo;
+    if (!emailToVal) { setEmailStatus('error:Please enter a recipient email address.'); return; }
     const pNames = {1:'Days 1-30 · Earn the Right',2:'Days 31-60 · Surface Clarity',3:'Days 61-90 · Align Direction'};
     const allObjs = Object.entries(objs).flatMap(([pid,items])=>items.map(o=>({...o,phase:pNames[pid]})));
     const done    = allObjs.filter(o=>o.status==='complete');
@@ -382,7 +384,7 @@ function App() {
       '</table></body></html>';
 
     const gmailUrl = 'https://mail.google.com/mail/?view=cm' +
-      '&to=' + encodeURIComponent(emailTo) +
+      '&to=' + encodeURIComponent(emailToVal) +
       '&su=' + encodeURIComponent(subject) +
       '&body=' + encodeURIComponent(emailHTML);
     window.open(gmailUrl, '_blank');
@@ -696,11 +698,12 @@ function App() {
       <button onClick={printReport} style={{...btnG,marginTop:"4px",marginBottom:"6px"}}>🖨 PRINT / EXPORT PDF</button>
       <div style={{marginTop:"16px",borderTop:"1px solid "+C.border,paddingTop:"16px"}}>
         <div style={{fontSize:"10px",fontWeight:700,letterSpacing:"2px",color:C.muted,marginBottom:"8px"}}>SEND WEEKLY EMAIL</div>
-        <input type="email" placeholder="Recipient email address..." value={emailTo}
-          onChange={e=>{e.stopPropagation();setEmailTo(e.target.value);}}
-          onKeyDown={e=>e.stopPropagation()}
-          onClick={e=>e.stopPropagation()}
-          style={{width:"100%",background:C.card,border:"1px solid "+C.border,color:C.text,padding:"10px 12px",fontSize:"13px",borderRadius:"4px",boxSizing:"border-box",marginBottom:"8px",fontFamily:"monospace",outline:"1px solid "+C.green}}/>
+        <input
+          ref={emailInputRef}
+          type="email"
+          placeholder="Recipient email address..."
+          defaultValue={emailTo}
+          style={{width:"100%",background:C.card,border:"1px solid "+C.border,color:C.text,padding:"10px 12px",fontSize:"13px",borderRadius:"4px",boxSizing:"border-box",marginBottom:"8px",fontFamily:"monospace"}}/>
         <button onClick={sendWeeklyEmail} disabled={emailSending} style={{...btnG,background:emailSending?"#1a5c38":C.green,opacity:emailSending?0.7:1,marginBottom:"6px"}}>
           {'📧 OPEN IN GMAIL'}
         </button>
