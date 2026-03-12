@@ -292,6 +292,34 @@ function App() {
     });
   }
 
+  const cleanUpNotes = () => {
+    const phaseNames = {1:'Days 1–30 (Earn the Right)',2:'Days 31–60 (Surface Clarity)',3:'Days 61–90 (Align Direction)'};
+    const allObjs = Object.entries(objs).flatMap(([pid,items])=>items.map(o=>({...o,phase:phaseNames[pid]})));
+    const done    = allObjs.filter(o=>o.status==='complete');
+    const active  = allObjs.filter(o=>o.status==='in_progress');
+    const blocked = allObjs.filter(o=>o.status==='blocked');
+    const dayNum  = startDate ? Math.min(90,Math.max(1,Math.floor((new Date()-new Date(startDate))/86400000)+1)) : null;
+
+    const rawNotes = [
+      rpt.highlights ? 'HIGHLIGHTS (raw): ' + rpt.highlights : '',
+      rpt.blockers   ? 'BLOCKERS (raw): '   + rpt.blockers   : '',
+      rpt.nextWeek   ? 'NEXT WEEK (raw): '  + rpt.nextWeek   : ''
+    ].filter(Boolean).join('\n\n');
+
+    const context = [
+      dayNum ? 'Day ' + dayNum + ' of 90' : '',
+      done.length + '/' + allObjs.length + ' objectives complete',
+      active.length > 0 ? 'In progress: ' + active.map(o=>o.text.split('—')[0].trim()).join('; ') : '',
+      blocked.length > 0 ? 'Blocked: ' + blocked.map(o=>o.text.split('—')[0].trim()).join('; ') : ''
+    ].filter(Boolean).join(' · ');
+
+    const prompt = 'I am a Business Unit Director at CBRE GWS Local Victoria on day ' + (dayNum||'?') + ' of my 90-day onboarding plan. I have dictated rough notes for my weekly progress report. Please clean them up into polished, professional first-person copy — remove filler words, fix grammar, tighten sentences, keep it specific and direct.\n\nContext: ' + context + '\n\n' + (rawNotes || 'No notes yet — please write a brief placeholder based on the context above.') + '\n\nReturn THREE clearly labelled sections:\n1. HIGHLIGHTS / PROGRESS\n2. BLOCKERS / RISKS\n3. NEXT WEEK PRIORITIES\n\nKeep each section to 3–4 bullet points using •';
+
+    const url = 'https://claude.ai/new?q=' + encodeURIComponent(prompt);
+    window.open(url, '_blank');
+  };
+
+
   const setStatus = (pid,id,status)=>{
     const next={...objs,[pid]:objs[pid].map(o=>o.id===id?{...o,status}:o)};
     setObjs(next); persist(next,intel,startDate);
@@ -596,6 +624,10 @@ function App() {
       </button>
       {aiError && <div style={{color:C.risk,fontSize:"12px",marginBottom:"8px",fontFamily:"monospace"}}>{aiError}</div>}
       <div style={{fontSize:"11px",color:C.muted,textAlign:"center",marginBottom:"8px",fontStyle:"italic"}}>Reads your objectives & intel → drafts highlights, blockers & next week for you to review</div>
+      <button onClick={cleanUpNotes} style={{...btnG, marginBottom:"8px", background:C.greenDark, border:'1px solid '+C.green}}>
+        🧹 CLEAN UP MY NOTES
+      </button>
+      <div style={{fontSize:"11px",color:C.muted,textAlign:"center",marginBottom:"8px",fontStyle:"italic"}}>Opens Claude · paste your raw dictated notes → get clean professional copy back</div>
       <button onClick={printReport} style={{...btnG,marginTop:"4px",marginBottom:"6px"}}>🖨 PRINT / EXPORT PDF</button>
       <EmailPanel C={C} btnG={btnG} objs={objs} rpt={rpt} startDate={startDate} fmtDate={fmtDate} getNearestFriday={getNearestFriday}/>
       <div style={{fontSize:"11px",color:C.muted,textAlign:"center",marginBottom:"20px",fontStyle:"italic"}}>Opens print dialog — save as PDF to share</div>
