@@ -586,12 +586,12 @@ function App() {
       <div style={lbl}>Weekly Report</div>
       <div style={{marginBottom:"10px"}}>
         <div style={{fontSize:"10px",fontFamily:"monospace",color:C.muted,letterSpacing:"2px",marginBottom:"5px",textTransform:"uppercase"}}>Week Ending</div>
-        <input type="date" defaultValue={rpt.weekEnding} onBlur={e=>updateRpt("weekEnding",e.target.value)} style={{...inp}}/>
+        <input type="date" value={rpt.weekEnding||""} onChange={e=>updateRpt("weekEnding",e.target.value)} style={{...inp}}/>
       </div>
       {[{k:"highlights",l:"Progress / Highlights",ph:"Key things achieved this week..."},{k:"blockers",l:"Blockers / Risks",ph:"Issues, risks, things needing support..."},{k:"nextWeek",l:"Next Week Priorities",ph:"Top priorities for next week..."}].map(f=>(
         <div key={f.k} style={{marginBottom:"10px"}}>
           <div style={{fontSize:"10px",fontFamily:"monospace",color:C.muted,letterSpacing:"2px",marginBottom:"5px",textTransform:"uppercase"}}>{f.l}</div>
-          <textarea defaultValue={rpt[f.k]} onBlur={e=>updateRpt(f.k,e.target.value)} placeholder={f.ph} rows={3} style={{...inp,resize:"none"}}/>
+          <textarea value={rpt[f.k]||""} onChange={e=>updateRpt(f.k,e.target.value)} placeholder={f.ph} rows={3} style={{...inp,resize:"none"}}/>
         </div>
       ))}
       <button onClick={aiDraftReport} disabled={aiDrafting} style={{...btnG,marginBottom:"8px",background:aiDrafting?C.greenDark:C.green,opacity:aiDrafting?0.7:1}}>
