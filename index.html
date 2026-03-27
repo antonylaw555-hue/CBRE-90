@@ -212,6 +212,13 @@ function EmailPanel({C, btnG, objs, rpt, startDate, fmtDate, getNearestFriday}) 
   );
 }
 
+// Stable component wrappers - prevent remount on every render
+let _PlanTab, _IntelTab, _StatsTab, _ReportTab;
+const PlanTab   = (...a) => _PlanTab(...a);
+const IntelTab  = (...a) => _IntelTab(...a);
+const StatsTab  = (...a) => _StatsTab(...a);
+const ReportTab = (...a) => _ReportTab(...a);
+
 function App() {
   const [tab, setTab]           = useState("plan");
   const [phase, setPhase]       = useState(1);
@@ -443,7 +450,7 @@ function App() {
   const lbl  = {fontSize:"10px",fontFamily:"monospace",letterSpacing:"3px",color:C.muted,textTransform:"uppercase",marginBottom:"10px"};
 
   // ── PLAN ──
-  const PlanTab = ()=>{
+  _PlanTab = ()=>{
     const newObjRef=useRef(null);
     const noteRef=useRef(null);
     return (
@@ -515,7 +522,7 @@ function App() {
   };
 
   // ── INTEL ──
-  const IntelTab = ()=>{
+  _IntelTab = ()=>{
     const ref=useRef(null);
     return <div style={{padding:"16px"}}>
       <div style={lbl}>Log Intel</div>
@@ -544,7 +551,7 @@ function App() {
   };
 
   // ── STATS ──
-  const StatsTab = ()=>{
+  _StatsTab = ()=>{
     const c={complete:0,in_progress:0,blocked:0,not_started:0};
     allO.forEach(o=>c[o.status]++);
     return <div style={{padding:"16px"}}>
@@ -601,7 +608,7 @@ function App() {
   };
 
   // ── REPORT ──
-  const ReportTab = ()=>{
+  _ReportTab = ()=>{
     const sdColor={complete:"#1a7a42",in_progress:"#c8a94a",blocked:"#e07060",not_started:"#ccc"};
     const sdLabel={complete:"Complete",in_progress:"In Progress",blocked:"Blocked",not_started:"Not Started"};
     const today=new Date().toLocaleDateString("en-AU",{day:"numeric",month:"long",year:"numeric"});
