@@ -1,0 +1,502 @@
+{
+  "objectives": {
+    "1": [
+      {
+        "id": "1a",
+        "text": "Walk each major contract \u2014 meet frontline staff, not just managers",
+        "status": "in_progress",
+        "notes": "Day 1: Attended Monash University site visit with Catherine (Account Director) \u2014 alarm response contract discussion. Day 4: Stryker flagged as at-risk account with no stable team in place. SGS site visit and town hall planning underway with Rob Phillips. Siemens fitout project reviewed with Jason. Further site visits to be scheduled across portfolio. Day 6: Monash University Sienna campus walk \u2014 met Sam and Raj (clients). Committed to return to meet wider team and walk remaining campuses. Sam flagged biggest opportunity at Monash is projects. Ramsay hospitals site visit planned next week."
+      },
+      {
+        "id": "1b",
+        "text": "Introductory client conversations \u2014 listening, not presenting",
+        "status": "in_progress",
+        "notes": "Day 1: Introductory meeting with Monash University (alarms contract). Day 2: Attended Monash University T&C meeting \u2014 terms discussion underway, pricing deep dive with Nick. Day 4: Catherine (MU) comfortable post-Monday catch-up. CSL client dialogue session scheduled Friday \u2014 CBRE to push harder on solution, not just present. Evan to take MU contact for coffee to test financial model gaps. Secondary CSL workshop agreed with client. Day 6: Met Sam and Raj at Monash University \u2014 Evan talked to Raj about FIR deal gaps. Day 6: 1:1s with APAC team continued \u2014 Dan discussion on fuel prices and soft caveat in tenders. Day 7: Met Steve Alston \u2014 introductory welcome discussion."
+      },
+      {
+        "id": "1c",
+        "text": "Review top 10 contracts by margin \u2014 understand P&L origins",
+        "status": "in_progress",
+        "notes": "Day 1: Alstom termination flagged \u2014 not performance-related, client citing lack of funds. Meeting with Tom Minio and Evan to manage. Day 3: Siemens FM contract \u2014 reactive revenue showing zero, potential sandbagging flagged. Day 3: Three contracts with live P&L exposure identified \u2014 Commonwealth Bank, Audi, Juilliard. Aged debt, aged WIP, revenue accruals, intercompany complexity. Antony taking personal ownership to close. Day 4: SGS contract delay 2-3 months \u2014 revenue phasing impact to be tabled by Rob Phillips. Full top 10 margin review yet to be formally completed. Day 7: Pushed Rob on Audi unbilled revenue and debt. Day 7: Alstom clarifications for $2M project. Deep dive P&L top 10 scheduled next week."
+      },
+      {
+        "id": "1d",
+        "text": "Leadership 1:1s \u2014 understand the team before assessing it",
+        "status": "in_progress",
+        "notes": "Day 1: Team briefings completed \u2014 senior leadership and second tier. Monday stand-up attended. 1:1 with Rob \u2014 flagged frustration around previous communication style, change welcomed. Day 2: 1:1 with Carl (Sales/BDM) \u2014 concern about Evan reporting into him, cultural fit question. 1:1 with Eliza (HR Director) \u2014 advised to get close to Catherine (MU), Carl, and Virish. Day 2: Continued induction with Tom. Day 3: 1:1 with Virish (Finance BP) \u2014 enthusiastic, wants closer operational partnership, felt distant from outgoing BUD. Day 3: Nick Stelianis approached Antony directly \u2014 excited about change, offered to help navigate CBRE corporate. Day 4: Further session with Eliza \u2014 onboarding going well, more stabilisation needed than expected. All direct report 1:1s to be scheduled within 3 weeks. 50/50 format \u2014 open chat plus targeted objectives. Day 6: APAC 1:1s continued \u2014 Dan (fuel prices, soft caveat in tenders). Day 7: Met Monique (FD) \u2014 ran through headline numbers and Vic-specific detail. Met Katrina \u2014 talent and TA support, introduced to pipeline. Met Steve Alston \u2014 introductory welcome. Day 7: Spoke with Adam Grando re projects \u2014 agreed Jason needs to replace 1 leaving PM, sort Chai salary uplift, use fractional PMs if Siemens lands. Day 8: Zoetis kick-off with wider CBRE business. Session with Nicola (Sales Exec) on bid strategy and win themes. Reporting line friction resolved \u2014 Karl to report to Evan, Sarah to come into Antony with dotted line to Evan."
+      },
+      {
+        "id": "1e",
+        "text": "Understand sales pipeline \u2014 what's live, qualified, at risk",
+        "status": "in_progress",
+        "notes": "Day 1: Siemens deal ~$5M and Amazon deal $1.7M-$3M both expected in week 1. Monash University alarms contract $1.6M \u2014 in negotiation. No-bid review underway (Carl). Day 2: Monash FIR contract T&C discussion progressing \u2014 pricing is key risk, close to position needed. Day 3: Siemens $5.8M project reviewed with Jason \u2014 numbers not well understood internally. Day 4: Siemens confirmed as e-auction (previously miscommunicated as not). Bid entered \u2014 minimum $31K price drop required. Stryker account very quiet \u2014 no stable team, retention risk. SGS wider contract delayed 2-3 months. CSL new opportunity in solution phase \u2014 dialogue session Friday. Day 6: MEM session \u2014 Vic pipeline flagged as weak. Private sector IFM case study needed for marketing. Day 7: Siemens last cut discussions to land $5M project \u2014 CBRE third on price, considering budget-efficient offer. Alstom $2M project clarifications underway. Day 8: Zoetis IFM pursuit kicked off \u2014 must-win for Vic BU."
+      }
+    ],
+    "2": [
+      {
+        "id": "2a",
+        "text": "Contract-level margin & risk review \u2014 where are we exposed?",
+        "status": "not_started",
+        "notes": "Preliminary observations only at this stage. Known exposures: Alstom termination (revenue loss), Commonwealth Bank/Audi/Juilliard aged debt and WIP, Siemens FM reactive revenue zero, SGS phasing delay. Formal contract-level margin review not yet commenced \u2014 scheduled for Days 31-60. Day 7: Met Monique (FD) \u2014 ran through headline Vic numbers. Deep dive P&L top 10 scheduled next week."
+      },
+      {
+        "id": "2b",
+        "text": "Growth opportunity mapping \u2014 real pipeline vs optimistic",
+        "status": "not_started",
+        "notes": "Pipeline visibility building. Siemens $5.8M (e-auction Day 4), Amazon $1.7M-$3M, Monash FIR $1.6M, CSL expansion, SGS wider contract. Formal qualification of real vs optimistic pipeline not yet completed. Jason's projects function needs finance closer involvement to improve pipeline accuracy. Day 6: MEM session confirmed Vic pipeline is weak. Private sector IFM case study needed for marketing support. Day 8: Zoetis added as major must-win pursuit."
+      },
+      {
+        "id": "2c",
+        "text": "Leadership depth assessment \u2014 who's ready to grow, where are gaps?",
+        "status": "in_progress",
+        "notes": "Early reads only \u2014 confidential. Jason (Head of Projects): initial concern around capability at this level, may be better suited to senior PM role. Projects team (2 people below Jason): both looking to leave \u2014 acute retention risk. Absorption model being considered. Nick Stelianis (CSL): strong performer, shining star, high potential. Carl: capable but anxious about Evan reporting line. Virish: strong finance partner, underutilised under previous BUD. Formal assessment to follow 1:1 series. Day 7: Adam Grando (NSW) confirmed Jason needs to replace 1 leaving PM, resolve Chai salary, use fractional PMs if Siemens lands. Day 7: Met Katrina \u2014 talent support introduced to pipeline. Day 8: Karl/Evan reporting friction resolved \u2014 structural clarity established."
+      },
+      {
+        "id": "2d",
+        "text": "Mobilisation discipline review \u2014 onboarding safely and profitably?",
+        "status": "in_progress",
+        "notes": "Monash FIR: ~15 FIR roles to recruit in a skills-shortage market. Recruitment strategy drafted by Antony \u2014 dual cohort approach (young tech-attracted talent and mature part-time workers). Shared with Nick, positive feedback. PR/brand campaign using Monash and CBRE brands proposed. SGS: wider contract rollout delayed 2-3 months. Lone working devices procurement flagged \u2014 must be tied into safety team before proceeding. Day 8: Zoetis kick-off \u2014 early strategy to get to site, flood with bid resource and expertise to show intent. Nicola (Sales Exec) engaged on bid strategy and win themes."
+      }
+    ],
+    "3": [
+      {
+        "id": "3a",
+        "text": "Name one retention priority \u2014 most at-risk relationship with action plan",
+        "status": "not_started",
+        "notes": "Too early to formally name. Early candidates: Stryker (silent client, no stable team), CSL (solution phase \u2014 must close well). To be confirmed in Days 31-60."
+      },
+      {
+        "id": "3b",
+        "text": "Identify one margin improvement lever \u2014 specific, actionable",
+        "status": "not_started",
+        "notes": "Too early to formally identify. Early signals: variation discipline and scope capture on existing contracts, fuel rate recovery (action to review contracts for unforeseen cost clauses \u2014 flagged Day 1), aged debt recovery on Commonwealth Bank/Audi/Juilliard. To be confirmed in Days 31-60."
+      },
+      {
+        "id": "3c",
+        "text": "Define one structured growth initiative \u2014 qualified, capacity-aligned",
+        "status": "not_started",
+        "notes": "Too early to formally define. Strongest current candidate: Monash University FIR contract ($1.6M) \u2014 in active negotiation, close to position. Secondary: CSL expansion. To be confirmed in Days 31-60."
+      }
+    ]
+  },
+  "intel": [
+    {
+      "id": "i01",
+      "date": "2026-03-23",
+      "day": 1,
+      "category": "Client",
+      "subject": "Alstom \u2014 termination notice received",
+      "detail": "Friday phone call received \u2014 client intends to terminate. Not performance-related, citing lack of funds. Tom Minio and Evan Rutherford meeting with client Tuesday 24 March. Revenue exposure to be quantified.",
+      "risk": "high",
+      "action": "Monitor outcome of Tuesday meeting. Quantify revenue exposure and mobilisation/demobilisation obligations."
+    },
+    {
+      "id": "i02",
+      "date": "2026-03-23",
+      "day": 1,
+      "category": "People",
+      "subject": "Team briefings \u2014 transition announced",
+      "detail": "Senior leadership team and second tier briefed on Evan moving to Associate Director/BDD and Antony Law moving into BUD. Both sessions received well. BUD introduction deck presented. Teams moved into Monday morning stand-up immediately after.",
+      "risk": "low",
+      "action": "Continue visibility and engagement. Monitor for any delayed reaction in coming weeks."
+    },
+    {
+      "id": "i03",
+      "date": "2026-03-23",
+      "day": 1,
+      "category": "Pipeline",
+      "subject": "Siemens deal ~$5M and Amazon $1.7M-$3M expected this week",
+      "detail": "Jason flagged both deals expected to land in week 1. Siemens ~$5M, Amazon $1.7M-$3M range.",
+      "risk": "medium",
+      "action": "Monitor. Confirmed Day 4 \u2014 Siemens is an e-auction at 3pm Thursday 27 March."
+    },
+    {
+      "id": "i04",
+      "date": "2026-03-23",
+      "day": 1,
+      "category": "Client",
+      "subject": "Monash University \u2014 alarms contract $1.6M in negotiation",
+      "detail": "Monash FIR contract variation to existing HVAC MSA. 24/7/365 Facilities Incident Response Services at Clayton Campus. Net annual value ~$1.6M. Catherine Accetta is Account Director. Contract 3+3+3, first anniversary 2027.",
+      "risk": "medium",
+      "action": "Attend Tuesday meeting. Complete pricing review by Monday. Push back on KPI linkage to main contract. Resolve Annexure D pricing discrepancy before signature."
+    },
+    {
+      "id": "i05",
+      "date": "2026-03-23",
+      "day": 1,
+      "category": "Commercial",
+      "subject": "Fuel rate recovery \u2014 action to review contracts",
+      "detail": "Discussion in APAC board session \u2014 fuel prices have increased significantly. Action to review contracts where unforeseen cost recovery clauses may allow pass-through to clients.",
+      "risk": "medium",
+      "action": "Review contracts for fuel cost recovery provisions. Quantify potential upside."
+    },
+    {
+      "id": "i06",
+      "date": "2026-03-23",
+      "day": 1,
+      "category": "People",
+      "subject": "Team culture \u2014 early read from Rob 1:1",
+      "detail": "Rob flagged frustration in team around previous communication style. Change in leadership welcomed. Small number of individuals noted as wobbling \u2014 need early support.",
+      "risk": "medium",
+      "action": "Identify wobbling individuals. Schedule 1:1s within 3 weeks. Embed no-surprises culture early."
+    },
+    {
+      "id": "i07",
+      "date": "2026-03-24",
+      "day": 2,
+      "category": "Systems",
+      "subject": "Projects data in SharePoint \u2014 to be confirmed",
+      "detail": "Question raised: does Projects save detail in SharePoint \u2014 costing, project plans etc?",
+      "risk": "low",
+      "action": "Confirm with relevant team member how project data is stored and accessed."
+    },
+    {
+      "id": "i08",
+      "date": "2026-03-24",
+      "day": 2,
+      "category": "People",
+      "subject": "Carl (Sales/BDM) \u2014 concern about Evan reporting line",
+      "detail": "Carl anxious about the transition \u2014 not about Antony, but about Evan now reporting into him full time. Concern around cultural fit and leadership style.",
+      "risk": "medium",
+      "action": "Monitor. Do not act prematurely. Watch dynamic between Carl and Evan as it develops."
+    },
+    {
+      "id": "i09",
+      "date": "2026-03-24",
+      "day": 2,
+      "category": "People",
+      "subject": "Eliza (HR) \u2014 key relationship advice",
+      "detail": "Eliza advised Antony to get close to three people quickly: Catherine (MU Account Director), Carl, and Virish (Finance BP). Evan perceived as distant from these three under previous arrangement.",
+      "risk": "low",
+      "action": "Prioritise 1:1s with Catherine, Carl, and Virish. Already progressing well with Virish."
+    },
+    {
+      "id": "i10",
+      "date": "2026-03-24",
+      "day": 2,
+      "category": "Client",
+      "subject": "Monash FIR \u2014 pricing is the main risk",
+      "detail": "T&C discussion progressing. Pricing not well understood internally. 1.5 hours spent with Nick working through detail. Close to position needed. Risk assessed as manageable. Full review to be completed by Monday for Tom.",
+      "risk": "high",
+      "action": "Complete pricing review by Monday. Present to Tom in Sydney. MU meeting to reconvene Friday or next week. Push back on KPI linkage to main HVAC contract."
+    },
+    {
+      "id": "i11",
+      "date": "2026-03-24",
+      "day": 2,
+      "category": "Commercial",
+      "subject": "Monash FIR \u2014 mobilisation risk: ~15 roles in skills-short market",
+      "detail": "FIR contract requires approximately 15 people to be recruited in a skills-shortage market. Significant resourcing risk to mobilisation timeline.",
+      "risk": "high",
+      "action": "Recruitment strategy drafted \u2014 dual cohort approach. Shared with Nick. Progress PR/brand campaign using Monash and CBRE brands."
+    },
+    {
+      "id": "i12",
+      "date": "2026-03-24",
+      "day": 2,
+      "category": "Strategy",
+      "subject": "Market observation \u2014 integrated FM pitch at CFO level",
+      "detail": "Australian market still single-sourcing M&E elements (HVAC, plumbing, electrical) separately. Significant efficiency case for integrated outsourcing model exists but is undersold. CBRE needs to pitch the integrated FM value case at CFO level, not FM manager level.",
+      "risk": "low",
+      "action": "Develop into a BD positioning thought piece. Discuss with Evan and national BD team."
+    },
+    {
+      "id": "i13",
+      "date": "2026-03-25",
+      "day": 3,
+      "category": "Pipeline",
+      "subject": "Siemens $5.8M fitout project \u2014 numbers not understood internally",
+      "detail": "Deep dive with Jason (Head of Projects) on J&A. Jason knows project detail but not across the numbers with sufficient confidence for a project of this value. Sent away to recut numbers. Client has $5M budget, clear capital scope defined \u2014 manageable risk. Contract not yet received.",
+      "risk": "medium",
+      "action": "Jason to recut numbers and return. Finance to have greater input on project cost builds going forward. Await contract before committing."
+    },
+    {
+      "id": "i14",
+      "date": "2026-03-25",
+      "day": 3,
+      "category": "People",
+      "subject": "Jason (Head of Projects) \u2014 capability concern and resourcing flag",
+      "detail": "Jason flagged he is under-resourced \u2014 needs project managers and support. Initial read: Jason may be better suited to a senior PM role rather than Head of Projects. Early view only \u2014 confidential. Full review scheduled Day 4.",
+      "risk": "high",
+      "action": "Complete workload and capability review Day 4. Do not act on people assessment until more evidence gathered. Explore absorption model."
+    },
+    {
+      "id": "i15",
+      "date": "2026-03-25",
+      "day": 3,
+      "category": "People",
+      "subject": "Projects team \u2014 both members looking to leave",
+      "detail": "Catherine called to flag both members of the projects team (2 people) are looking at other options. Effectively the entire delivery team below Jason is at flight risk. Connects to Jason's resourcing complaint.",
+      "risk": "high",
+      "action": "Factor into Day 4 Jason review. Explore absorption model urgently. Do not let this drift \u2014 live project delivery risk on Siemens and others."
+    },
+    {
+      "id": "i16",
+      "date": "2026-03-25",
+      "day": 3,
+      "category": "Client",
+      "subject": "CSL \u2014 red flag around on-site manager",
+      "detail": "Client proactively flagged concern about one of CBRE's on-site managers \u2014 history with the cleaning team at new CSL site. Client went out of their way to raise it. Nick meeting client contact tonight. Evan reaching out to Gita tomorrow.",
+      "risk": "high",
+      "action": "Do not ignore. Wait for Nick and Evan intelligence before deciding on action. Decision on individual to follow."
+    },
+    {
+      "id": "i17",
+      "date": "2026-03-25",
+      "day": 3,
+      "category": "Finance",
+      "subject": "Virish (Finance BP) \u2014 projects data gap",
+      "detail": "Flash reporting Month 5 significantly delayed. Virish struggles to get numbers from projects team and receives them with little detail. Same gap identified in Siemens J&A session.",
+      "risk": "medium",
+      "action": "Link Jason to Virish as a priority. Support-not-control approach. Build the relationship gradually so projects naturally partners with finance."
+    },
+    {
+      "id": "i18",
+      "date": "2026-03-25",
+      "day": 3,
+      "category": "Finance",
+      "subject": "Three contracts with aged debt/WIP \u2014 P&L exposure",
+      "detail": "Commonwealth Bank, Audi, and Juilliard all carrying aged debt, aged WIP, revenue accruals, and intercompany complexity. Have been circulating unresolved for some time. Team fatigued. Risk of P&L hit to Victoria if not closed soon.",
+      "risk": "high",
+      "action": "Antony taking personal ownership. Raise with Tom in Sydney for intercompany escalation support if needed. Close out."
+    },
+    {
+      "id": "i19",
+      "date": "2026-03-25",
+      "day": 3,
+      "category": "Finance",
+      "subject": "Siemens FM contract \u2014 reactive revenue zero, potential sandbagging",
+      "detail": "Siemens FM contract showing reactive revenue as zero. Team indicates a billing is coming but this should not be accepted at face value.",
+      "risk": "medium",
+      "action": "Monitor and follow up directly. Do not accept verbal assurance as closed."
+    },
+    {
+      "id": "i20",
+      "date": "2026-03-25",
+      "day": 3,
+      "category": "People",
+      "subject": "Nick Stelianis (CSL Account Lead) \u2014 high potential, strong ally",
+      "detail": "Nick approached Antony directly. Strong performer \u2014 has driven CSL to the point where the new larger opportunity exists. Excited about leadership change, already noticed open culture. Offered to help navigate CBRE corporate.",
+      "risk": "low",
+      "action": "Schedule formal 1:1 within 3 weeks. Invest in this relationship \u2014 high potential individual."
+    },
+    {
+      "id": "i21",
+      "date": "2026-03-26",
+      "day": 4,
+      "category": "Pipeline",
+      "subject": "Siemens $5.8M \u2014 confirmed as e-auction, bid entered",
+      "detail": "Previously communicated internally as not an e-auction \u2014 incorrect. Confirmed as e-auction at 3pm Thursday 27 March. Minimum $31K price drop required to enter bid. Outcome pending. Miscommunication itself is a flag on internal commercial discipline.",
+      "risk": "medium",
+      "action": "Await outcome. Note internal communication failure for projects governance review."
+    },
+    {
+      "id": "i22",
+      "date": "2026-03-26",
+      "day": 4,
+      "category": "Client",
+      "subject": "SGS contract \u2014 2-3 month delay on wider rollout",
+      "detail": "Rob Phillips flagged delay in wider SGS contract rollout. Current contract being pushed for signature \u2014 procurement says it is on its way. Delay will affect revenue phasing for Victoria BU. Town hall-style presentation needed to educate SGS budget holders on CBRE value proposition and efficiency case.",
+      "risk": "medium",
+      "action": "Rob to table phasing revenue impact for forecasting. Rob putting town hall invites and prep sessions in diary. Antony to support both prep and delivery."
+    },
+    {
+      "id": "i23",
+      "date": "2026-03-26",
+      "day": 4,
+      "category": "Client",
+      "subject": "Stryker \u2014 silent client, no stable team in place",
+      "detail": "Evan flagged Stryker account as very quiet from client side. CBRE does not have a stable team in place. Silent client with unstable delivery is a retention risk.",
+      "risk": "high",
+      "action": "Explore moving Rohan onto Stryker given Alstom scale-back freeing capacity. Confirm Rohan availability. Do not let this drift."
+    },
+    {
+      "id": "i24",
+      "date": "2026-03-26",
+      "day": 4,
+      "category": "Client",
+      "subject": "CSL \u2014 dialogue session Friday, secondary workshop agreed",
+      "detail": "Client feedback is that CBRE needs to push harder \u2014 test the model, challenge client thinking. Team briefed to go in with intent to push, not just present. Client open to secondary workshop. Suggestion to use external facilitator to extract client concerns and deepen solution conversation.",
+      "risk": "medium",
+      "action": "Brief team before Friday. Antony to get involved in secondary workshop. Consider external facilitator."
+    },
+    {
+      "id": "i25",
+      "date": "2026-03-26",
+      "day": 4,
+      "category": "Client",
+      "subject": "Monash FIR \u2014 pricing review by Monday, Evan to take client for coffee",
+      "detail": "Full pricing deep dive to be completed by Monday morning. Evan to take MU contact for coffee to test whether client can help bridge any financial model gaps. MU meeting pushed to next week by client. Catherine comfortable post-Monday catch-up.",
+      "risk": "medium",
+      "action": "Complete pricing review by Monday. Evan to confirm MU meeting date. Lock in."
+    },
+    {
+      "id": "i26",
+      "date": "2026-03-26",
+      "day": 4,
+      "category": "Operations",
+      "subject": "Lone working devices \u2014 procurement must involve safety team",
+      "detail": "Team looking to procure lone working devices. Risk that this becomes another system entering the business without proper governance.",
+      "risk": "medium",
+      "action": "Confirm safety team is involved before any procurement proceeds."
+    },
+    {
+      "id": "i27",
+      "date": "2026-03-30",
+      "day": 6,
+      "category": "Client",
+      "subject": "Monash University \u2014 Sienna campus walk, met Sam and Raj",
+      "detail": "Site visit to Monash University Sienna campus. Met Sam and Raj (clients). Committed to return to meet wider team and walk remaining campuses. Sam flagged that the biggest opportunity at Monash is projects \u2014 not just the FIR/HVAC scope.",
+      "risk": "low",
+      "action": "Book return visit to meet wider Monash team and walk remaining campuses. Develop projects opportunity with Sam."
+    },
+    {
+      "id": "i28",
+      "date": "2026-03-30",
+      "day": 6,
+      "category": "Client",
+      "subject": "Monash FIR \u2014 Evan discussed deal gaps with Raj",
+      "detail": "Evan used the site visit to talk directly with Raj about the FIR deal and where CBRE has gaps in the financial model. Constructive approach to bridge gaps before formal meeting.",
+      "risk": "medium",
+      "action": "Await Evan feedback on Raj conversation. Factor into pricing review."
+    },
+    {
+      "id": "i29",
+      "date": "2026-03-30",
+      "day": 6,
+      "category": "Commercial",
+      "subject": "APAC 1:1 \u2014 Dan, fuel prices and soft caveat in tenders",
+      "detail": "Discussion with Dan (APAC) about fuel price increases and approach to soft caveats in tender submissions. Covers CBRE position on passing through unforeseen cost increases.",
+      "risk": "medium",
+      "action": "Develop fuel cost analysis and plan \u2014 scheduled for next week. Apply soft caveat approach to active tenders."
+    },
+    {
+      "id": "i30",
+      "date": "2026-03-30",
+      "day": 6,
+      "category": "Pipeline",
+      "subject": "CSL management review ready for submission",
+      "detail": "CSL management review prepared and ready to submit following solution and dialogue sessions.",
+      "risk": "low",
+      "action": "Submit. Monitor client response."
+    },
+    {
+      "id": "i31",
+      "date": "2026-03-30",
+      "day": 6,
+      "category": "Strategy",
+      "subject": "MEM session \u2014 Vic pipeline weak, private sector IFM case study needed",
+      "detail": "MEM session highlighted Victorian pipeline is weak. Action to find a private sector IFM case study for marketing purposes to support pipeline development.",
+      "risk": "high",
+      "action": "Work with marketing to identify and develop a private sector IFM case study. Address pipeline weakness in Days 31-60 growth mapping."
+    },
+    {
+      "id": "i32",
+      "date": "2026-03-31",
+      "day": 7,
+      "category": "Finance",
+      "subject": "Monique (FD) \u2014 Vic headline numbers reviewed",
+      "detail": "Met Monique (Finance Director). Ran through headline numbers and Victoria-specific financial detail.",
+      "risk": "low",
+      "action": "Deep dive P&L top 10 scheduled next week. Continue building finance relationship."
+    },
+    {
+      "id": "i33",
+      "date": "2026-03-31",
+      "day": 7,
+      "category": "People",
+      "subject": "Katrina \u2014 Talent Acquisition support introduced to pipeline",
+      "detail": "Met Katrina. Ran through talent and TA support offering. Introduced her to the pipeline so she can support with talent acquisition planning \u2014 particularly relevant for Monash FIR mobilisation.",
+      "risk": "low",
+      "action": "Engage Katrina on Monash FIR recruitment plan. Keep her close to pipeline as new pursuits progress."
+    },
+    {
+      "id": "i34",
+      "date": "2026-03-31",
+      "day": 7,
+      "category": "People",
+      "subject": "Adam Grando (NSW) \u2014 projects resourcing plan agreed",
+      "detail": "Spoke with Adam Grando re where Vic can learn from NSW on projects. Agreed: Jason to replace 1 leaving PM, sort out Chai salary uplift, and use fractional PMs if Siemens lands.",
+      "risk": "medium",
+      "action": "Jason to action PM replacement hire. Resolve Chai salary uplift. Fractional PM model to activate if Siemens confirmed."
+    },
+    {
+      "id": "i35",
+      "date": "2026-03-31",
+      "day": 7,
+      "category": "Finance",
+      "subject": "Audi \u2014 pushed Rob on unbilled revenue and debt",
+      "detail": "Followed up Rob Phillips directly on Audi unbilled revenue and outstanding debt. Keeping pressure on to close this out.",
+      "risk": "high",
+      "action": "Rob to provide update and timeline to close. Antony maintaining ownership."
+    },
+    {
+      "id": "i36",
+      "date": "2026-03-31",
+      "day": 7,
+      "category": "Client",
+      "subject": "Alstom \u2014 clarifications on $2M project",
+      "detail": "Clarifications being worked through on the Alstom $2M project \u2014 separate to the termination of the main contract.",
+      "risk": "medium",
+      "action": "Progress clarifications and confirm revenue position on $2M project."
+    },
+    {
+      "id": "i37",
+      "date": "2026-03-31",
+      "day": 7,
+      "category": "Pipeline",
+      "subject": "Siemens $5M \u2014 CBRE third on price, last cut discussions",
+      "detail": "CBRE design is strong but currently sitting third on price. Last cut discussions underway. Question: offer a more budget-efficient option or hold position? Discussing with Jason in the morning.",
+      "risk": "high",
+      "action": "Jason discussion to resolve pricing approach. Decide: budget-efficient alternative offer vs hold. Do not discount margin unnecessarily."
+    },
+    {
+      "id": "i38",
+      "date": "2026-03-31",
+      "day": 7,
+      "category": "People",
+      "subject": "Steve Alston \u2014 introductory meeting",
+      "detail": "Met Steve Alston for introduction and welcome discussion.",
+      "risk": "low",
+      "action": "Follow up as relationship develops."
+    },
+    {
+      "id": "i39",
+      "date": "2026-04-01",
+      "day": 8,
+      "category": "Pipeline",
+      "subject": "Zoetis IFM pursuit \u2014 kick-off with wider CBRE business",
+      "detail": "Zoetis kick-off meeting held with wider CBRE business. Not a solution session \u2014 purpose was to brief bid resource and align intent. Early strategy: get to site, flood with bid resource and expertise to demonstrate willing and intent. This is a must-win pursuit for the Victoria BU.",
+      "risk": "high",
+      "action": "Arrange site visit to Zoetis Parkville. Assign bid resource. Develop solution with Nicola. Treat as highest priority pursuit."
+    },
+    {
+      "id": "i40",
+      "date": "2026-04-01",
+      "day": 8,
+      "category": "Pipeline",
+      "subject": "Nicola (Sales Exec) \u2014 Zoetis bid strategy and win themes",
+      "detail": "Spent time with Nicola on bid strategy and win themes for Zoetis. Early stage \u2014 building the pursuit approach.",
+      "risk": "medium",
+      "action": "Continue developing win themes and differentiators with Nicola. Feed into bid programme."
+    },
+    {
+      "id": "i41",
+      "date": "2026-04-01",
+      "day": 8,
+      "category": "People",
+      "subject": "Karl/Evan reporting line friction \u2014 resolved",
+      "detail": "Friction identified between Karl and Evan around reporting line \u2014 concern from both sides. Karl uncomfortable reporting to Evan; Evan not happy about losing part of his team. Antony spoke with both individually. Resolution: Karl to report to Evan for the foreseeable. Sarah to report into Antony with a dotted line to Evan.",
+      "risk": "medium",
+      "action": "Monitor dynamic between Karl and Evan. Ensure clarity on Sarah reporting line is communicated. Check in with both in coming weeks."
+    }
+  ],
+  "startDate": "2026-03-23",
+  "rpt": {
+    "highlights": "Week 1: Strong start. Team briefings landed well. Monash FIR pricing review underway. Siemens e-auction entered. CSL management review ready for submission. Week 2: Monash campus walk completed \u2014 met Sam and Raj, projects opportunity identified. Zoetis kick-off held \u2014 must-win pursuit activated. APAC 1:1s progressing. Finance relationship building with Monique and Virish. Karl/Evan reporting friction resolved cleanly.",
+    "blockers": "Vic pipeline flagged as weak in MEM session \u2014 needs urgent attention. Siemens $5M project \u2014 CBRE third on price, decision on budget-efficient offer pending. Projects team retention risk ongoing \u2014 PM replacement hire needed. Three aged debt contracts (Commonwealth Bank, Audi, Juilliard) still open. Monash FIR pricing review not yet complete. Zoetis is a must-win but is early stage with significant bid work required.",
+    "nextWeek": "Deep dive P&L top 10. 1:1 with Rob Phillips. Plan for Ian Entwisle visit. Ramsay hospitals site visit. Fuel cost analysis and plan. Siemens pricing decision with Jason. Monash FIR pricing review to Tom. Zoetis site visit and bid resource allocation. Audi/Commonwealth Bank/Juilliard debt close-out. PM replacement hire for projects.",
+    "weekEnding": "2026-04-04"
+  },
+  "exported": "2026-04-04T00:00:00.000Z"
+}
