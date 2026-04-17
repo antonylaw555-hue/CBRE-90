@@ -30,7 +30,7 @@
 const { useState, useEffect, useRef, useCallback } = React;
 
 const AUTH_KEY = "cbre_auth_v1";
-const PASS_HASH = "55ddc0c187444ff24adc0b05d0bfe5e30fdb837a9d1443a309df5c897478c00a"; // SHA-256 of CBRE2025
+const PASS_HASH = "55ddc0c187444ff24adc0b05d0bfe5e30fdb837a9d1443a309df5c897478c00a";
 
 async function sha256(str) {
   const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(str));
@@ -88,8 +88,6 @@ function LockScreen({ onUnlock }) {
   );
 }
 
-
-
 const C = {
   bg:"#0b1f14", panel:"#112219", card:"#152b1e", border:"#1e3d2a",
   green:"#3dbe7a", greenDim:"#2a8a56", greenDark:"#1a5c38",
@@ -139,28 +137,26 @@ function save(key, val) {
   try { localStorage.setItem(key, JSON.stringify(val)); } catch(e){}
 }
 
-// SVG icons
 const IcoPlan   = ()=><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="15" x2="10" y2="15"/><line x1="8" y1="19" x2="14" y2="19"/></svg>;
 const IcoIntel  = ()=><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>;
 const IcoStats  = ()=><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>;
 const IcoReport = ()=><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>;
 
-  // Returns nearest Friday (this Friday if today is Mon-Fri, next Friday if Sat/Sun)
-  const getNearestFriday = () => {
-    const d = new Date();
-    const day = d.getDay();
-    const daysToFriday = day === 0 ? 5 : day === 6 ? 6 : (5 - day);
-    d.setDate(d.getDate() + daysToFriday);
-    const dd = String(d.getDate()).padStart(2,'0');
-    const mm = String(d.getMonth()+1).padStart(2,'0');
-    const yyyy = d.getFullYear();
-    return yyyy + '-' + mm + '-' + dd;
-  };
-  const fmtDate = (iso) => {
-    if (!iso) return '';
-    const p = iso.split('-');
-    return p.length === 3 ? p[2] + '/' + p[1] + '/' + p[0] : iso;
-  };
+const getNearestFriday = () => {
+  const d = new Date();
+  const day = d.getDay();
+  const daysToFriday = day === 0 ? 5 : day === 6 ? 6 : (5 - day);
+  d.setDate(d.getDate() + daysToFriday);
+  const dd = String(d.getDate()).padStart(2,'0');
+  const mm = String(d.getMonth()+1).padStart(2,'0');
+  const yyyy = d.getFullYear();
+  return yyyy + '-' + mm + '-' + dd;
+};
+const fmtDate = (iso) => {
+  if (!iso) return '';
+  const p = iso.split('-');
+  return p.length === 3 ? p[2] + '/' + p[1] + '/' + p[0] : iso;
+};
 
 function EmailPanel({C, btnG, objs, rpt, startDate, fmtDate, getNearestFriday}) {
   const [emailStatus, setEmailStatus] = React.useState('');
@@ -187,11 +183,9 @@ function EmailPanel({C, btnG, objs, rpt, startDate, fmtDate, getNearestFriday}) 
     const section = (title,content) => content ? '<tr><td style="padding:0 28px 20px;"><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-bottom:10px;border-bottom:2px solid #3dbe7a;"><span style="font-size:10px;font-weight:700;letter-spacing:2px;color:#006241;text-transform:uppercase;">'+title+'</span></td></tr><tr><td style="padding-top:10px;font-size:13px;color:#333;line-height:1.8;white-space:pre-wrap;">'+content+'</td></tr></table></td></tr>' : '';
     const subject = 'CBRE GWS Local VIC · BUD Weekly Update · Week Ending '+weekEnd+' (Day '+dayNum+' of 90)';
     const emailHTML = '<!DOCTYPE html><html><body style="margin:0;padding:20px;background:#f0f2f0;font-family:Arial,Helvetica,sans-serif;"><table width="680" cellpadding="0" cellspacing="0" border="0" style="margin:0 auto;background:#ffffff;border-radius:4px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.12);"><tr><td style="background:#006241;padding:0;"><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding:22px 28px;vertical-align:middle;"><table cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right:14px;vertical-align:middle;"><div style="background:#3dbe7a;display:inline-block;padding:6px 14px;border-radius:2px;"><span style="font-size:15px;font-weight:900;color:#0b1f14;letter-spacing:3px;">CBRE</span></div></td><td style="vertical-align:middle;border-left:1px solid rgba(255,255,255,0.3);padding-left:14px;"><div style="font-size:17px;font-weight:700;color:#ffffff;letter-spacing:1px;">GWS LOCAL · VICTORIA</div><div style="font-size:10px;color:rgba(255,255,255,0.7);letter-spacing:2px;margin-top:3px;">BUSINESS UNIT DIRECTOR · WEEKLY UPDATE</div></td></tr></table></td><td style="padding:22px 28px;text-align:right;vertical-align:middle;"><div style="color:rgba(255,255,255,0.7);font-size:10px;letter-spacing:1px;text-transform:uppercase;">Week Ending</div><div style="color:#3dbe7a;font-size:18px;font-weight:700;margin-top:2px;">'+weekEnd+'</div><div style="color:rgba(255,255,255,0.6);font-size:11px;margin-top:4px;background:rgba(0,0,0,0.2);display:inline-block;padding:2px 10px;border-radius:10px;">Day '+dayNum+' of 90</div></td></tr></table></td></tr><tr><td style="background:#0b1f14;padding:16px 20px;"><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>'+phases+'</tr></table></td></tr><tr><td style="height:24px;"></td></tr>'+section('Progress / Highlights',rpt.highlights)+section('Blockers / Risks',rpt.blockers)+section('Next Week Priorities',rpt.nextWeek)+'<tr><td style="padding:0 28px 24px;"><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-bottom:10px;border-bottom:2px solid #3dbe7a;"><span style="font-size:10px;font-weight:700;letter-spacing:2px;color:#006241;text-transform:uppercase;">Objective Status</span></td></tr><tr><td style="padding-top:10px;"><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr style="background:#006241;"><th style="padding:8px 12px;text-align:left;font-size:10px;font-weight:700;color:#fff;letter-spacing:1px;text-transform:uppercase;white-space:nowrap;">Phase</th><th style="padding:8px 12px;text-align:left;font-size:10px;font-weight:700;color:#fff;letter-spacing:1px;text-transform:uppercase;">Objective</th><th style="padding:8px 12px;text-align:center;font-size:10px;font-weight:700;color:#fff;letter-spacing:1px;text-transform:uppercase;white-space:nowrap;">Status</th></tr>'+objRows+'</table></td></tr></table></td></tr><tr><td style="background:#006241;padding:12px 28px;"><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="font-size:11px;color:rgba(255,255,255,0.8);">CBRE GWS Local · Victoria</td><td style="font-size:11px;color:rgba(255,255,255,0.6);text-align:center;">Confidential · Internal Use Only</td><td style="font-size:11px;color:rgba(255,255,255,0.8);text-align:right;">Generated '+today+'</td></tr></table></td></tr></table></body></html>';
-    // Copy branded HTML to clipboard
     navigator.clipboard.write([new ClipboardItem({'text/html': new Blob([emailHTML], {type:'text/html'}), 'text/plain': new Blob([subject], {type:'text/plain'})})]).catch(function() {
       navigator.clipboard.writeText(emailHTML).catch(function() {});
     });
-    // Open Gmail compose with just To + Subject (body blank for paste)
     const gmailUrl = 'https://mail.google.com/mail/?view=cm&to='+encodeURIComponent(emailToVal)+'&su='+encodeURIComponent(subject);
     window.open(gmailUrl,'_blank');
     setEmailStatus('pasted');
@@ -201,7 +195,7 @@ function EmailPanel({C, btnG, objs, rpt, startDate, fmtDate, getNearestFriday}) 
     <div style={{marginTop:"16px",borderTop:"1px solid "+C.border,paddingTop:"16px"}}>
       <div style={{fontSize:"10px",fontWeight:700,letterSpacing:"2px",color:C.muted,marginBottom:"8px"}}>SEND WEEKLY EMAIL</div>
       <input ref={emailRef} type="email" placeholder="Recipient email address..."
-        style={{width:"100%",background:C.card,border:"1px solid "+C.border,color:C.text,padding:"10px 12px",fontSize:"13px",borderRadius:"4px",boxSizing:"border-box",marginBottom:"8px",fontFamily:"monospace"}}/>
+        style={{width:"100%",background:C.card,border:"1px solid "+C.border,color:C.white,padding:"10px 12px",fontSize:"13px",borderRadius:"4px",boxSizing:"border-box",marginBottom:"8px",fontFamily:"monospace"}}/>
       <button onClick={sendEmail} style={{...btnG,marginBottom:"6px"}}>📧 COPY & OPEN GMAIL</button>
       <div style={{minHeight:"22px",textAlign:"center",marginTop:"4px"}}>
         {(emailStatus==='sent'||emailStatus==='pasted') && <span style={{color:C.green,fontSize:"12px",fontWeight:700}}>✅ Gmail opened · Branded HTML copied — paste into body (Ctrl+V) then Send!</span>}
@@ -212,7 +206,6 @@ function EmailPanel({C, btnG, objs, rpt, startDate, fmtDate, getNearestFriday}) 
   );
 }
 
-// Stable component wrappers - prevent remount on every render
 let _PlanTab, _IntelTab, _StatsTab, _ReportTab;
 const PlanTab   = (...a) => _PlanTab(...a);
 const IntelTab  = (...a) => _IntelTab(...a);
@@ -230,7 +223,6 @@ function App() {
   const [editNoteId, setEditNoteId]=useState(null);
   const [rpt, setRpt]           = useState(()=>load(RKEY,{highlights:"",blockers:"",nextWeek:"",weekEnding:getNearestFriday()}));
 
-  // weekEnding defaults to nearest Friday in initial state
   const printContentRef = useRef(null);
 
   const persist = useCallback((o,i,sd)=>{
@@ -261,7 +253,6 @@ function App() {
 
   const [aiDrafting, setAiDrafting] = React.useState(false);
   const [aiError, setAiError] = React.useState('');
-  // email state moved to EmailPanel component
 
   const aiDraftReport = () => {
     const phaseNames = {1:'Days 1–30 (Earn the Right)',2:'Days 31–60 (Surface Clarity)',3:'Days 61–90 (Align Direction)'};
@@ -287,17 +278,12 @@ function App() {
     allObjs.filter(o=>o.status==='not_started').slice(0,Math.max(0,3-active.length)).forEach(o => nw.push('• Begin: ' + o.text.split('—')[0].trim()));
     if(nw.length===0) nw.push('• Review overall plan progress and adjust priorities.');
 
-    const hiStr = hi.join('\n');
-    const blStr = bl.join('\n');
-    const nwStr = nw.join('\n');
-
-    // Single atomic state update — avoids React batching issue
     setRpt(prev => {
-      const updated = {...prev, highlights: hiStr, blockers: blStr, nextWeek: nwStr};
+      const updated = {...prev, highlights: hi.join('\n'), blockers: bl.join('\n'), nextWeek: nw.join('\n')};
       save(RKEY, updated);
       return updated;
     });
-  }
+  };
 
   const cleanUpNotes = () => {
     const phaseNames = {1:'Days 1–30 (Earn the Right)',2:'Days 31–60 (Surface Clarity)',3:'Days 61–90 (Align Direction)'};
@@ -322,10 +308,8 @@ function App() {
 
     const prompt = 'I am a Business Unit Director at CBRE GWS Local Victoria on day ' + (dayNum||'?') + ' of my 90-day onboarding plan. I have dictated rough notes for my weekly progress report. Please clean them up into polished, professional first-person copy — remove filler words, fix grammar, tighten sentences, keep it specific and direct.\n\nContext: ' + context + '\n\n' + (rawNotes || 'No notes yet — please write a brief placeholder based on the context above.') + '\n\nReturn THREE clearly labelled sections:\n1. HIGHLIGHTS / PROGRESS\n2. BLOCKERS / RISKS\n3. NEXT WEEK PRIORITIES\n\nKeep each section to 3–4 bullet points using •';
 
-    const url = 'https://claude.ai/new?q=' + encodeURIComponent(prompt);
-    window.open(url, '_blank');
+    window.open('https://claude.ai/new?q=' + encodeURIComponent(prompt), '_blank');
   };
-
 
   const setStatus = (pid,id,status)=>{
     const next={...objs,[pid]:objs[pid].map(o=>o.id===id?{...o,status}:o)};
@@ -381,7 +365,6 @@ function App() {
     const statusColor = {complete:'#006241',in_progress:'#b8860b',blocked:'#c0392b',not_started:'#888'};
     const today = new Date().toLocaleDateString('en-AU',{day:'2-digit',month:'long',year:'numeric'});
     const dayNum = startDate ? Math.min(90,Math.max(1,Math.floor((new Date()-new Date(startDate))/86400000)+1)) : '—';
-    
     const el = document.getElementById('print-root');
     el.innerHTML = `
       <div style="font-family:Arial,sans-serif;color:#1a1a1a;max-width:800px;margin:0 auto;">
@@ -443,7 +426,6 @@ function App() {
     window.print();
   };
 
-  // shared style helpers
   const inp  = {width:"100%",background:C.card,border:`1px solid ${C.border}`,color:C.white,padding:"13px",fontFamily:"Georgia,serif",fontSize:"16px",borderRadius:"3px",outline:"none",boxSizing:"border-box"};
   const btnG = {background:C.green,color:"#000",border:"none",padding:"13px",fontFamily:"monospace",fontSize:"13px",fontWeight:"700",letterSpacing:"2px",borderRadius:"3px",cursor:"pointer",width:"100%"};
   const btnO = {background:"transparent",color:C.green,border:`1px solid ${C.green}`,padding:"10px 16px",fontFamily:"monospace",fontSize:"11px",borderRadius:"3px",cursor:"pointer"};
@@ -459,13 +441,14 @@ function App() {
           <div style={{display:"flex",gap:"8px",marginBottom:"14px"}}>
             {PHASES.map(p=>{
               const pc=pct(p.id), active=phase===p.id;
+              const ip=Math.round(objs[p.id].filter(x=>x.status==="in_progress").length/objs[p.id].length*100);
               return <button key={p.id} onClick={()=>{setPhase(p.id);setExpandedId(null);setEditNoteId(null);}} style={{flex:1,padding:"10px 6px",background:active?C.card:"transparent",border:`1px solid ${active?C.green:C.border}`,borderRadius:"3px",cursor:"pointer",textAlign:"center"}}>
                 <div style={{fontFamily:"monospace",fontSize:"9px",color:active?C.green:C.muted,letterSpacing:"1px",marginBottom:"2px"}}>DAYS</div>
                 <div style={{fontFamily:"monospace",fontSize:"13px",fontWeight:"700",color:active?C.green:C.muted}}>{p.label}</div>
                 <div style={{marginTop:"6px",height:"3px",background:C.faint,borderRadius:"2px",position:"relative"}}>
-  <div style={{position:"absolute",height:"100%",width:`${Math.min((pct(p.id)+Math.round(objs[p.id].filter(x=>x.status==="in_progress").length/objs[p.id].length*100)),100)}%`,background:C.greenDim,borderRadius:"2px",left:0}}/>
-  <div style={{position:"absolute",height:"100%",width:`${pc}%`,background:active?C.green:C.greenDim,borderRadius:"2px",left:0}}/>
-</div>
+                  <div style={{position:"absolute",height:"100%",width:`${Math.min(pc+ip,100)}%`,background:C.gold,borderRadius:"2px",left:0}}/>
+                  <div style={{position:"absolute",height:"100%",width:`${pc}%`,background:active?C.green:C.greenDim,borderRadius:"2px",left:0}}/>
+                </div>
                 <div style={{marginTop:"3px",fontSize:"9px",fontFamily:"monospace",color:pc===100?C.green:C.muted}}>{pc}%</div>
               </button>;
             })}
@@ -498,8 +481,7 @@ function App() {
                 </div>
                 {editThis
                   ?<div>
-                    <textarea ref={noteRef} defaultValue={obj.notes} placeholder="Context, observations, blockers..." rows={3}
-                      style={{...inp,resize:"none",marginBottom:"8px"}}/>
+                    <textarea ref={noteRef} defaultValue={obj.notes} placeholder="Context, observations, blockers..." rows={3} style={{...inp,resize:"none",marginBottom:"8px"}}/>
                     <div style={{display:"flex",gap:"8px"}}>
                       <button onClick={()=>saveNote(phase,obj.id,noteRef.current?.value||"")} style={{...btnG,width:"auto",padding:"10px 20px"}}>SAVE</button>
                       <button onClick={()=>setEditNoteId(null)} style={btnO}>Cancel</button>
@@ -582,10 +564,10 @@ function App() {
             </div>
             <div style={{fontFamily:"monospace",fontSize:"22px",fontWeight:"700",color:pc===100?C.green:C.white}}>{pc}%</div>
           </div>
-         <div style={{height:"4px",background:C.faint,borderRadius:"2px",marginBottom:"8px",position:"relative"}}>
-  <div style={{position:"absolute",height:"100%",width:`${Math.min((d+a)/o.length*100,100)}%`,background:C.gold,borderRadius:"2px",left:0}}/>
-  <div style={{position:"absolute",height:"100%",width:`${pc}%`,background:C.green,borderRadius:"2px",left:0}}/>
-</div>
+          <div style={{height:"4px",background:C.faint,borderRadius:"2px",marginBottom:"8px",position:"relative"}}>
+            <div style={{position:"absolute",height:"100%",width:`${Math.min((d+a)/o.length*100,100)}%`,background:C.gold,borderRadius:"2px",left:0}}/>
+            <div style={{position:"absolute",height:"100%",width:`${pc}%`,background:C.green,borderRadius:"2px",left:0}}/>
+          </div>
           <div style={{display:"flex",gap:"12px"}}>
             <span style={{fontSize:"11px",fontFamily:"monospace",color:C.green}}>{d} done</span>
             {a>0&&<span style={{fontSize:"11px",fontFamily:"monospace",color:C.gold}}>{a} active</span>}
@@ -595,8 +577,7 @@ function App() {
       })}
       <div style={{marginTop:"16px"}}>
         <div style={lbl}>Start Date</div>
-        <input type="date" defaultValue={startDate} onBlur={e=>{setStartDate(e.target.value);persist(objs,intel,e.target.value);}}
-          style={{...inp}}/>
+        <input type="date" defaultValue={startDate} onBlur={e=>{setStartDate(e.target.value);persist(objs,intel,e.target.value);}} style={{...inp}}/>
       </div>
       <div style={{marginTop:"20px",paddingTop:"16px",borderTop:`1px solid ${C.border}`}}>
         <div style={lbl}>Sync Between Devices</div>
@@ -633,7 +614,7 @@ function App() {
       </button>
       {aiError && <div style={{color:C.risk,fontSize:"12px",marginBottom:"8px",fontFamily:"monospace"}}>{aiError}</div>}
       <div style={{fontSize:"11px",color:C.muted,textAlign:"center",marginBottom:"8px",fontStyle:"italic"}}>Reads your objectives & intel → drafts highlights, blockers & next week for you to review</div>
-      <button onClick={cleanUpNotes} style={{...btnG, marginBottom:"8px", background:C.greenDark, border:'1px solid '+C.green}}>
+      <button onClick={cleanUpNotes} style={{...btnG,marginBottom:"8px",background:C.greenDark,border:'1px solid '+C.green}}>
         🧹 CLEAN UP MY NOTES
       </button>
       <div style={{fontSize:"11px",color:C.muted,textAlign:"center",marginBottom:"8px",fontStyle:"italic"}}>Opens Claude · paste your raw dictated notes → get clean professional copy back</div>
@@ -647,8 +628,6 @@ function App() {
         {PHASES.map(p=><div key={p.id}>✦ {p.fullLabel}: <span style={{color:C.green}}>{pct(p.id)}%</span></div>)}
         <div>📝 Intel entries: <span style={{color:C.white}}>{intel.length}</span></div>
       </div>
-
-      {/* Hidden print content */}
       <div ref={printContentRef} style={{display:"none"}}>
         <div style={{background:"#0d3a20",color:"white",padding:"18px 22px",display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:"20px",borderRadius:"3px"}}>
           <div style={{display:"flex",alignItems:"center"}}>
@@ -733,7 +712,6 @@ function App() {
 
   return (
     <div style={{background:C.bg,fontFamily:"Georgia,serif",color:C.white,maxWidth:"480px",margin:"0 auto",minHeight:"100vh"}}>
-      {/* TOP BAR */}
       <div style={{background:C.panel,borderBottom:`1px solid ${C.border}`,padding:"12px 16px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
         <div style={{display:"flex",alignItems:"center",gap:"10px"}}>
           <div style={{background:C.green,color:"#000",fontFamily:"monospace",fontWeight:"900",fontSize:"11px",padding:"4px 8px",borderRadius:"2px"}}>CBRE</div>
@@ -750,7 +728,6 @@ function App() {
           <div style={{fontSize:"10px",fontFamily:"monospace",color:saved?C.green:"transparent",transition:"color 0.3s"}}>✓ SAVED</div>
         </div>
       </div>
-      {/* TABS */}
       <div style={{background:C.panel,borderBottom:`1px solid ${C.border}`,display:"flex"}}>
         {TABS.map(({id,l,I})=>(
           <button key={id} onClick={()=>setTab(id)} style={{flex:1,padding:"10px 4px 11px",background:"transparent",border:"none",borderBottom:`3px solid ${tab===id?C.green:"transparent"}`,color:tab===id?C.green:C.muted,cursor:"pointer",display:"flex",flexDirection:"column",alignItems:"center",gap:"2px"}}>
@@ -758,7 +735,6 @@ function App() {
           </button>
         ))}
       </div>
-      {/* CONTENT */}
       <div style={{paddingBottom:"40px"}}>
         {tab==="plan"  &&<PlanTab/>}
         {tab==="intel" &&<IntelTab/>}
@@ -769,7 +745,6 @@ function App() {
   );
 }
 
-
 function Root() {
   const [authed, setAuthed] = useState(() => {
     try { return localStorage.getItem(AUTH_KEY) === PASS_HASH; } catch(e){ return false; }
@@ -778,7 +753,6 @@ function Root() {
   return <App />;
 }
 ReactDOM.createRoot(document.getElementById("app")).render(<Root/>);
-
 </script>
 </body>
 </html>
