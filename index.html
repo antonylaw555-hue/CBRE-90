@@ -462,9 +462,10 @@ function App() {
               return <button key={p.id} onClick={()=>{setPhase(p.id);setExpandedId(null);setEditNoteId(null);}} style={{flex:1,padding:"10px 6px",background:active?C.card:"transparent",border:`1px solid ${active?C.green:C.border}`,borderRadius:"3px",cursor:"pointer",textAlign:"center"}}>
                 <div style={{fontFamily:"monospace",fontSize:"9px",color:active?C.green:C.muted,letterSpacing:"1px",marginBottom:"2px"}}>DAYS</div>
                 <div style={{fontFamily:"monospace",fontSize:"13px",fontWeight:"700",color:active?C.green:C.muted}}>{p.label}</div>
-                <div style={{marginTop:"6px",height:"3px",background:C.faint,borderRadius:"2px"}}>
-                  <div style={{height:"100%",width:`${pc}%`,background:active?C.green:C.greenDim,borderRadius:"2px"}}/>
-                </div>
+                <div style={{marginTop:"6px",height:"3px",background:C.faint,borderRadius:"2px",position:"relative"}}>
+  <div style={{position:"absolute",height:"100%",width:`${Math.min((pct(p.id)+Math.round(objs[p.id].filter(x=>x.status==="in_progress").length/objs[p.id].length*100)),100)}%`,background:C.greenDim,borderRadius:"2px",left:0}}/>
+  <div style={{position:"absolute",height:"100%",width:`${pc}%`,background:active?C.green:C.greenDim,borderRadius:"2px",left:0}}/>
+</div>
                 <div style={{marginTop:"3px",fontSize:"9px",fontFamily:"monospace",color:pc===100?C.green:C.muted}}>{pc}%</div>
               </button>;
             })}
