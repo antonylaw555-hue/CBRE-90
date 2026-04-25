@@ -318,30 +318,44 @@ function App() {
       // Build intel summary - most recent 40 entries
       const intelSummary = intel.slice(0,40).map(i=>`[${i.date}] ${i.text}`).join('\n');
 
-      const prompt = `You are an intelligent 90-day onboarding tracker for Antony Law, Business Unit Director at CBRE GWS Local Victoria. You started on 23 March 2026. Today is day ${dayNum||'?'} of 90.
+      const prompt = `You are the intelligence layer of a 90-day onboarding tracker for Antony Law, Business Unit Director at CBRE GWS Local Victoria. Start date: 23 March 2026. Today is day ${dayNum||'?'} of 90.
 
-You have access to all intel logged and the current state of the 90-day plan objectives. Your job is to:
-1. Update each objective's status based on the evidence in the intel
-2. Rewrite each objective's notes with a concise, current summary of where things stand
-3. Draft a weekly report (highlights, blockers, next week priorities)
+Antony is commercially minded, direct and operationally experienced. He does not need hand-holding. His report goes to the MD Australia and APAC President. Tone must be executive, specific, and direct — no corporate filler, no vague language.
 
-STATUS RULES:
-- "complete" = the objective has been fully achieved, no further action needed
-- "in_progress" = actively being worked on with evidence of activity
+YOUR THREE TASKS:
+
+TASK 1 — UPDATE OBJECTIVES
+Read all intel and assess the true current status of each objective. Write concise, factual notes (2-4 sentences max) summarising the current position, key actions taken, and what remains. Notes should read like a status briefing, not a diary entry. Use specific names, numbers and outcomes from the intel.
+
+STATUS RULES (be accurate — do not mark complete unless truly done):
+- "complete" = fully achieved, no further action needed
+- "in_progress" = actively being worked on with clear evidence of activity
 - "blocked" = cannot proceed due to a specific named blocker
-- "not_started" = no evidence of any activity
+- "not_started" = no evidence of any activity whatsoever
+
+TASK 2 — DRAFT WEEKLY REPORT
+Write a sharp executive weekly report. Each section should be 3-5 bullet points using •.
+
+HIGHLIGHTS: Specific achievements and progress this week — name the clients, deals, meetings, decisions. Include outcomes, not just activities. Lead with the most commercially significant items.
+
+BLOCKERS/RISKS: Real risks only — name the client, contract or person. Include the nature of the risk and what is being done. If there are genuine risks in the intel (aged debt, underperforming staff, at-risk contracts, compliance failures) call them out. Do not write "no blockers" if risks exist in the intel.
+
+NEXT WEEK PRIORITIES: The 3-5 most important things Antony must do next week based on what is outstanding, at risk, or approaching deadline. Be specific — name the meeting, client, or decision. Do not just list all in-progress objectives.
+
+TASK 3 — BE SELECTIVE
+Only surface what is genuinely significant. A good weekly report tells the reader what they need to know to understand performance and risk — not everything that happened.
 
 CURRENT OBJECTIVES:
 ${objsSummary}
 
-INTEL LOG (most recent first):
+INTEL LOG (most recent first — read all entries carefully):
 ${intelSummary}
 
-Respond ONLY with valid JSON in exactly this structure, no other text, no markdown:
+Respond ONLY with valid JSON, no other text, no markdown backticks:
 {
   "objectives": {
     "1": [
-      {"id": "1a", "status": "in_progress", "notes": "concise current summary max 3 sentences"},
+      {"id": "1a", "status": "in_progress", "notes": "Specific factual summary of current position."},
       {"id": "1b", "status": "in_progress", "notes": "..."},
       {"id": "1c", "status": "in_progress", "notes": "..."},
       {"id": "1d", "status": "complete", "notes": "..."},
@@ -360,9 +374,9 @@ Respond ONLY with valid JSON in exactly this structure, no other text, no markdo
     ]
   },
   "report": {
-    "highlights": "bullet points using •",
-    "blockers": "bullet points using •",
-    "nextWeek": "bullet points using •"
+    "highlights": "• Specific achievement one\n• Specific achievement two\n• Specific achievement three",
+    "blockers": "• Named risk or blocker one\n• Named risk or blocker two",
+    "nextWeek": "• Specific priority one\n• Specific priority two\n• Specific priority three"
   }
 }`;
 
@@ -386,7 +400,7 @@ Respond ONLY with valid JSON in exactly this structure, no other text, no markdo
         },
         body: JSON.stringify({
           model: "claude-sonnet-4-6",
-          max_tokens: 2000,
+          max_tokens: 3000,
           messages: [{ role: "user", content: prompt }]
         })
       });
