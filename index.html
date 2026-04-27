@@ -213,7 +213,7 @@ function EmailPanel({C, btnG, objs, rpt, startDate, fmtDate, getNearestFriday}) 
     const pNames = {1:'Days 1-30 · Earn the Right',2:'Days 31-60 · Surface Clarity',3:'Days 61-90 · Align Direction'};
     const allObjs = Object.entries(objs).flatMap(([pid,items])=>items.map(o=>({...o,phase:pNames[pid]})));
     const dayNum  = startDate ? Math.min(90,Math.max(1,Math.floor((new Date()-new Date(startDate))/86400000)+1)) : '-';
-    const weekEnd = fmtDate(rpt.weekEnding || getNearestFriday());
+    const weekEnd = fmtDate(getNearestFriday());
     const today   = new Date().toLocaleDateString('en-AU',{day:'2-digit',month:'long',year:'numeric'});
     const sBg  = {complete:'#006241',in_progress:'#b45309',blocked:'#b91c1c',not_started:'#6b7280'};
     const sTxt = {complete:'Complete',in_progress:'In Progress',blocked:'Blocked',not_started:'Not Started'};
