@@ -784,6 +784,8 @@ const phaseActual = load('cbre_phase_progress') || {};    const allObjs = Object
     const sdLabel={complete:"Complete",in_progress:"In Progress",blocked:"Blocked",not_started:"Not Started"};
     const today=new Date().toLocaleDateString("en-AU",{day:"numeric",month:"long",year:"numeric"});
     const weLong=rpt.weekEnding?new Date(rpt.weekEnding+"T00:00:00").toLocaleDateString("en-AU",{day:"numeric",month:"long",year:"numeric"}):"—";
+    const phaseActual = load('cbre_phase_progress') || {};
+    const actualPct = (pid) => Number(phaseActual[pid]) || 0;
 
     return <div style={{padding:"16px"}}>
       <div style={lbl}>Weekly Report</div>
@@ -828,7 +830,7 @@ const phaseActual = load('cbre_phase_progress') || {};    const allObjs = Object
       <div style={{background:C.card,border:`1px solid ${C.border}`,borderRadius:"3px",padding:"14px",fontSize:"13px",color:C.muted,lineHeight:"1.9"}}>
         <div>📅 Week ending: <span style={{color:C.white}}>{weLong}</span></div>
         <div>📊 Overall: <span style={{color:C.green}}>{done}/{tot} complete</span>{blk>0&&<span style={{color:C.risk}}> · {blk} blocked</span>}</div>
-        {PHASES.map(p=><div key={p.id}>✦ {p.fullLabel}: <span style={{color:C.green}}>{pct(p.id)}%</span></div>)}
+        {PHASES.map(p=><div key={p.id}>✦ {p.fullLabel}: <span style={{color:C.green}}>{pct(p.id)}%</span> <span style={{color:C.muted,fontSize:"11px"}}>· Actual: <span style={{color:C.gold}}>{actualPct(p.id)}%</span></span></div>)}
         <div>📝 Intel entries: <span style={{color:C.white}}>{intel.length}</span></div>
       </div>
       <div ref={printContentRef} style={{display:"none"}}>
@@ -882,8 +884,11 @@ const phaseActual = load('cbre_phase_progress') || {};    const allObjs = Object
               </tbody>
             </table>
             <div style={{display:"flex",alignItems:"center",gap:"10px",margin:"6px 0 0"}}>
-              <div style={{flex:1,height:"4px",background:"#e8f0ec",borderRadius:"2px"}}><div style={{height:"100%",width:`${pc}%`,background:"#1a7a42",borderRadius:"2px"}}/></div>
-              <span style={{fontFamily:"monospace",fontSize:"11px",color:"#1a7a42"}}>{pc}% · {d} done{a>0?` · ${a} active`:""}{b>0?` · ${b} blocked`:""}</span>
+              <div style={{flex:1,height:"4px",background:"#e8f0ec",borderRadius:"2px",position:"relative"}}>
+                <div style={{position:"absolute",height:"100%",width:`${pc}%`,background:"#1a7a42",borderRadius:"2px",left:0,top:0}}/>
+                <div style={{position:"absolute",height:"100%",width:`${actualPct(p.id)}%`,background:"#c8a94a",borderRadius:"2px",left:0,top:0,opacity:0.55}}/>
+              </div>
+              <span style={{fontFamily:"monospace",fontSize:"11px",color:"#1a7a42"}}>{pc}% · {d} done{a>0?` · ${a} active`:""}{b>0?` · ${b} blocked`:""} · <span style={{color:"#8a6f1a"}}>Actual {actualPct(p.id)}%</span></span>
             </div>
           </div>;
         })}
