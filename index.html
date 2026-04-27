@@ -625,7 +625,7 @@ Respond ONLY with valid JSON, no other text, no markdown backticks:
                   <div style={{position:"absolute",height:"100%",width:`${Math.min(pc+ip,100)}%`,background:C.gold,borderRadius:"2px",left:0}}/>
                   <div style={{position:"absolute",height:"100%",width:`${pc}%`,background:active?C.green:C.greenDim,borderRadius:"2px",left:0}}/>
                 </div>
-                <div style={{marginTop:"3px",fontSize:"9px",fontFamily:"monospace",color:pc===100?C.green:C.muted}}>{pc}%</div>
+                <div style={{marginTop:"3px",fontSize:"9px",fontFamily:"monospace",color:pc===100?C.green:C.muted,display:"flex",justifyContent:"space-between",width:"100%"}}><span>{pc}% complete</span><span style={{color:C.gold}}>{ip}% in progress</span></div>
               </button>;
             })}
           </div>
