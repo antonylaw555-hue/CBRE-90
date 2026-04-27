@@ -213,6 +213,7 @@ function EmailPanel({C, btnG, objs, rpt, startDate, fmtDate, getNearestFriday}) 
     const pNames = {1:'Days 1-30 · Earn the Right',2:'Days 31-60 · Surface Clarity',3:'Days 61-90 · Align Direction'};
     const allObjs = Object.entries(objs).flatMap(([pid,items])=>items.map(o=>({...o,phase:pNames[pid]})));
     const dayNum  = startDate ? Math.min(90,Math.max(1,Math.floor((new Date()-new Date(startDate))/86400000)+1)) : '-';
+    const phaseActual = (function(){ try { const v = localStorage.getItem('cbre_phase_progress'); return v ? JSON.parse(v) : {}; } catch(e) { return {}; } })();
 const weekEnd = fmtDate(rpt.weekEnding || getNearestFriday());
    const today   = new Date().toLocaleDateString('en-AU',{day:'2-digit',month:'long',year:'numeric'});
     const sBg  = {complete:'#006241',in_progress:'#b45309',blocked:'#b91c1c',not_started:'#6b7280'};
@@ -220,7 +221,8 @@ const weekEnd = fmtDate(rpt.weekEnding || getNearestFriday());
     const phases = [1,2,3].map(pid => {
       const p = objs[pid]||[]; const d = p.filter(o=>o.status==='complete').length;
       const pct = p.length ? Math.round(d/p.length*100) : 0; const barW = Math.max(2,pct);
-      return '<td width="33%" style="padding:0 8px;vertical-align:top;"><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-bottom:6px;"><div style="font-size:10px;font-weight:700;letter-spacing:1px;color:#3dbe7a;text-transform:uppercase;">'+pNames[pid]+'</div></td></tr><tr><td><div style="font-size:28px;font-weight:900;color:#3dbe7a;line-height:1;">'+pct+'%</div><div style="font-size:11px;color:#aaa;margin-bottom:6px;">'+d+' of '+p.length+' complete</div><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td width="'+barW+'%" style="background:#3dbe7a;height:6px;border-radius:3px 0 0 3px;"></td><td width="'+(100-barW)+'%" style="background:#1a4a2e;height:6px;border-radius:0 3px 3px 0;"></td></tr></table></td></tr></table></td>';
+      const actual = Number(phaseActual[pid]) || 0; const aBarW = Math.max(0, Math.min(100, actual));
+      return '<td width="33%" style="padding:0 8px;vertical-align:top;"><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-bottom:6px;"><div style="font-size:10px;font-weight:700;letter-spacing:1px;color:#3dbe7a;text-transform:uppercase;">'+pNames[pid]+'</div></td></tr><tr><td><div style="font-size:28px;font-weight:900;color:#3dbe7a;line-height:1;">'+pct+'%</div><div style="font-size:11px;color:#aaa;margin-bottom:2px;">'+d+' of '+p.length+' complete</div><div style="font-size:11px;color:#c8a94a;font-weight:700;margin-bottom:6px;">Actual: '+actual+'%</div><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td width="'+barW+'%" style="background:#3dbe7a;height:6px;border-radius:3px 0 0 3px;"></td><td width="'+(100-barW)+'%" style="background:#1a4a2e;height:6px;border-radius:0 3px 3px 0;"></td></tr></table><table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:3px;"><tr><td width="'+aBarW+'%" style="background:#c8a94a;height:4px;border-radius:2px 0 0 2px;"></td><td width="'+(100-aBarW)+'%" style="background:#3a2e1a;height:4px;border-radius:0 2px 2px 0;"></td></tr></table></td></tr></table></td>';
     }).join('');
     const objRows = allObjs.map((o,i) =>
       '<tr style="background:'+(i%2===0?'#f5faf7':'#ffffff')+';"><td style="padding:8px 12px;font-size:11px;color:#555;border-bottom:1px solid #e2e8e4;white-space:nowrap;">'+o.phase+'</td><td style="padding:8px 12px;font-size:12px;color:#1a1a1a;border-bottom:1px solid #e2e8e4;">'+o.text+'</td><td style="padding:8px 12px;border-bottom:1px solid #e2e8e4;text-align:center;white-space:nowrap;"><span style="display:inline-block;background:'+(sBg[o.status]||'#6b7280')+';color:#fff;font-size:10px;font-weight:700;padding:3px 8px;border-radius:3px;">'+(sTxt[o.status]||o.status)+'</span></td></tr>'
@@ -594,7 +596,7 @@ const phaseActual = load('cbre_phase_progress') || {};    const allObjs = Object
           <div style="display:flex;gap:12px;margin-top:16px;">
             ${[1,2,3].map(pid=>`<div style="flex:1;background:#f5faf7;border:1px solid #c8e6c9;border-radius:4px;padding:10px 14px;min-height:80px;">
               <div style="font-size:10px;font-weight:700;letter-spacing:1px;color:#006241;margin-bottom:4px;">${phaseNames[pid]}</div>
-<div style="font-size:22px;font-weight:900;color:#3dbe7a;">${phasePct(pid)}% complete</div><div style="font-size:12px;color:#f0c040;margin-top:2px;">${JSON.stringify(phaseActual)} actual progress</div>            </div>`).join('')}
+<div style="font-size:22px;font-weight:900;color:#3dbe7a;">${phasePct(pid)}% complete</div><div style="font-size:12px;color:#f0c040;margin-top:2px;">${Number(phaseActual[pid]) || 0}% actual</div>            </div>`).join('')}
           </div>
         </div>
         <div style="background:#f0f0f0;padding:10px 32px;font-size:10px;color:#666;display:flex;justify-content:space-between;">
