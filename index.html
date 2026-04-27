@@ -440,8 +440,12 @@ Respond ONLY with valid JSON, no other text, no markdown backticks:
         ...rpt,
         highlights: parsed.report?.highlights || rpt.highlights,
         blockers: parsed.report?.blockers || rpt.blockers,
-        nextWeek: parsed.report?.nextWeek || rpt.nextWeek,
+       nextWeek: parsed.report?.nextWeek || rpt.nextWeek,
       };
+      if (parsed.phaseProgress) {
+        const pp = load('cbre_phase_progress') || {};
+        save('cbre_phase_progress', {...pp, ...parsed.phaseProgress});
+      }
 
       // Save everything
       setObjs(newObjs);
@@ -626,7 +630,7 @@ Respond ONLY with valid JSON, no other text, no markdown backticks:
                   <div style={{position:"absolute",height:"100%",width:`${Math.min(pc+ip,100)}%`,background:C.gold,borderRadius:"2px",left:0}}/>
                   <div style={{position:"absolute",height:"100%",width:`${pc}%`,background:active?C.green:C.greenDim,borderRadius:"2px",left:0}}/>
                 </div>
-                <div style={{marginTop:"3px",fontSize:"9px",fontFamily:"monospace",color:pc===100?C.green:C.muted,display:"flex",justifyContent:"space-between",width:"100%"}}><span>{pc}% complete</span><span style={{color:C.gold}}>{ip}% in progress</span></div>
+                <div style={{marginTop:"3px",fontSize:"9px",fontFamily:"monospace",color:pc===100?C.green:C.muted,display:"flex",justifyContent:"space-between",width:"100%"}}><span>{pc}% complete</span><span style={{color:C.gold}}>{ip}% in progress</span><span style={{color:C.green}}>{(load('cbre_phase_progress')||{})[p.id]||0}% actual</span></div>
               </button>;
             })}
           </div>
