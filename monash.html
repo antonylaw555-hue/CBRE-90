@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Monash Retention Plan · CBRE GWS Local Victoria</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #0a1628;
+    color: #e8edf2;
+    min-height: 100vh;
+    padding: 0;
+  }
+
+  /* ── TOP NAV ── */
+  .nav {
+    background: #003F2D;
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+    border-bottom: 2px solid #17E88F;
+  }
+  .nav-left { display: flex; align-items: center; gap: 1.5rem; }
+  .nav-logo {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: #fff;
+  }
+  .nav-divider { width: 1px; height: 24px; background: rgba(255,255,255,0.2); }
+  .nav-title { font-size: 13px; color: rgba(255,255,255,0.7); letter-spacing: 0.03em; }
+  .nav-back {
+    font-size: 12px;
+    color: #17E88F;
+    text-decoration: none;
+    padding: 6px 14px;
+    border: 1px solid #17E88F;
+    border-radius: 4px;
+    transition: all 0.15s;
+  }
+  .nav-back:hover { background: #17E88F; color: #003F2D; }
+
+  /* ── PAGE WRAPPER ── */
+  .page { max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+  /* ── HEADER ── */
+  .header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .header-left {}
+  .header-eyebrow { font-size: 11px; letter-spacing: 0.1em; color: #17E88F; text-transform: uppercase; margin-bottom: 4px; }
+  .header-title { font-size: 28px; font-weight: 600; color: #fff; margin-bottom: 4px; }
+  .header-sub { font-size: 13px; color: #8fa3b1; }
+  .risk-badge {
+    background: rgba(173,42,42,0.2);
+    border: 1px solid #AD2A2A;
+    color: #ff6b6b;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 4px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    align-self: flex-start;
+  }
+
+  /* ── STATS ── */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 1.5rem;
+  }
+  @media (max-width: 700px) { .stats { grid-template-columns: repeat(2, 1fr); } }
+  .stat {
+    background: #0f2038;
+    border: 1px solid #1e3a52;
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+  }
+  .stat-label { font-size: 11px; color: #8fa3b1; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 6px; }
+  .stat-value { font-size: 26px; font-weight: 600; color: #17E88F; }
+  .stat-sub { font-size: 12px; color: #8fa3b1; margin-top: 3px; }
+
+  /* ── PROGRESS BAR ── */
+  .progress-wrap { margin-bottom: 1.5rem; }
+  .progress-label { display: flex; justify-content: space-between; font-size: 12px; color: #8fa3b1; margin-bottom: 6px; }
+  .progress-bar-bg { background: #1e3a52; border-radius: 4px; height: 6px; }
+  .progress-bar-fill { background: #17E88F; border-radius: 4px; height: 6px; transition: width 0.4s ease; }
+
+  /* ── FILTERS ── */
+  .filters {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .filter-label { font-size: 12px; color: #8fa3b1; margin-right: 4px; }
+  .filter-btn {
+    font-size: 12px;
+    padding: 5px 14px;
+    border-radius: 4px;
+    border: 1px solid #1e3a52;
+    background: transparent;
+    color: #8fa3b1;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: inherit;
+  }
+  .filter-btn:hover { border-color: #17E88F; color: #17E88F; }
+  .filter-btn.active { background: #17E88F; color: #003F2D; border-color: #17E88F; font-weight: 600; }
+
+  /* ── PHASE HEADER ── */
+  .phase-block { margin-bottom: 2rem; }
+  .phase-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #1e3a52;
+    margin-bottom: 4px;
+  }
+  .phase-name { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; color: #17E88F; text-transform: uppercase; }
+  .phase-count { font-size: 11px; color: #8fa3b1; }
+
+  /* ── ACTION ROW ── */
+  .action-row {
+    display: grid;
+    grid-template-columns: 28px 1fr 100px 90px 100px;
+    gap: 12px;
+    align-items: center;
+    padding: 10px 8px;
+    border-radius: 6px;
+    transition: background 0.1s;
+    border-bottom: 1px solid rgba(30,58,82,0.5);
+  }
+  .action-row:last-child { border-bottom: none; }
+  .action-row:hover { background: rgba(255,255,255,0.03); }
+  @media (max-width: 700px) {
+    .action-row { grid-template-columns: 28px 1fr; }
+    .action-owner, .action-due, .action-status { display: none; }
+  }
+
+  /* ── CHECK CIRCLE ── */
+  .check-circle {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 1.5px solid #1e3a52;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all 0.15s;
+    background: transparent;
+    font-size: 13px;
+    color: transparent;
+  }
+  .check-circle:hover { border-color: #17E88F; }
+  .check-circle.done { background: #17E88F; border-color: #17E88F; color: #003F2D; }
+
+  .action-text { font-size: 13px; color: #c8d8e4; line-height: 1.5; }
+  .action-text.done-text { color: #4a6070; text-decoration: line-through; }
+
+  /* ── OWNER PILLS ── */
+  .owner-pill {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.15s;
+    white-space: nowrap;
+  }
+  .owner-pill:hover { opacity: 0.8; }
+  .owner-antony { background: rgba(0,63,45,0.4); color: #17E88F; border: 1px solid #17E88F; }
+  .owner-catherine { background: rgba(31,55,101,0.4); color: #6aabf7; border: 1px solid #3E7CA6; }
+  .owner-peter { background: rgba(136,80,115,0.4); color: #d4a0c4; border: 1px solid #885073; }
+  .owner-team { background: rgba(67,82,84,0.3); color: #a0b0b5; border: 1px solid #435254; }
+
+  /* ── DUE DATE ── */
+  .action-due { font-size: 12px; color: #8fa3b1; white-space: nowrap; }
+  .due-urgent { color: #f0a500; font-weight: 600; }
+  .due-done { color: #4a6070; }
+
+  /* ── STATUS PILLS ── */
+  .status-pill {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: opacity 0.15s;
+  }
+  .status-pill:hover { opacity: 0.8; }
+  .s-not-started { background: rgba(30,58,82,0.6); color: #8fa3b1; border: 1px solid #1e3a52; }
+  .s-in-progress { background: rgba(186,117,23,0.2); color: #f0a500; border: 1px solid #BA7517; }
+  .s-at-risk { background: rgba(173,42,42,0.2); color: #ff6b6b; border: 1px solid #AD2A2A; }
+  .s-done { background: rgba(0,63,45,0.4); color: #17E88F; border: 1px solid #17E88F; }
+
+  /* ── EDIT PANEL ── */
+  .edit-panel {
+    position: fixed;
+    top: 0; right: -420px;
+    width: 400px;
+    height: 100vh;
+    background: #0f2038;
+    border-left: 2px solid #17E88F;
+    padding: 2rem 1.5rem;
+    transition: right 0.3s ease;
+    z-index: 100;
+    overflow-y: auto;
+  }
+  .edit-panel.open { right: 0; }
+  .edit-panel h3 { font-size: 14px; font-weight: 600; color: #17E88F; margin-bottom: 1.5rem; letter-spacing: 0.05em; text-transform: uppercase; }
+  .edit-close { position: absolute; top: 1.5rem; right: 1.5rem; background: none; border: none; color: #8fa3b1; font-size: 20px; cursor: pointer; }
+  .edit-close:hover { color: #fff; }
+  .edit-field { margin-bottom: 1rem; }
+  .edit-field label { display: block; font-size: 11px; color: #8fa3b1; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 6px; }
+  .edit-field textarea, .edit-field select, .edit-field input {
+    width: 100%;
+    background: #0a1628;
+    border: 1px solid #1e3a52;
+    border-radius: 6px;
+    color: #e8edf2;
+    font-family: inherit;
+    font-size: 13px;
+    padding: 8px 10px;
+    resize: vertical;
+  }
+  .edit-field textarea { min-height: 80px; }
+  .edit-field select option { background: #0a1628; }
+  .edit-save {
+    width: 100%;
+    background: #17E88F;
+    color: #003F2D;
+    border: none;
+    border-radius: 6px;
+    padding: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 0.5rem;
+    font-family: inherit;
+    transition: opacity 0.15s;
+  }
+  .edit-save:hover { opacity: 0.85; }
+  .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 99; display: none; }
+  .overlay.open { display: block; }
+
+  /* ── FOOTER ── */
+  .footer { text-align: center; margin-top: 3rem; font-size: 11px; color: #4a6070; letter-spacing: 0.05em; }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-left">
+    <div class="nav-logo">CBRE</div>
+    <div class="nav-divider"></div>
+    <div class="nav-title">GWS LOCAL · VICTORIA</div>
+  </div>
+  <a href="https://antonylaw555-hue.github.io/CBRE-90" class="nav-back">← 90 Day Tracker</a>
+</nav>
+
+<div class="page">
+
+  <div class="header">
+    <div class="header-left">
+      <div class="header-eyebrow">Retention risk plan</div>
+      <div class="header-title">Monash University</div>
+      <div class="header-sub">Account Director: Catherine Accetta &nbsp;·&nbsp; Mentor: Peter May &nbsp;·&nbsp; Decision: Develop in role</div>
+    </div>
+    <div class="risk-badge">High Risk · Active</div>
+  </div>
+
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-label">Total actions</div>
+      <div class="stat-value" id="stat-total">36</div>
+      <div class="stat-sub">across 3 phases</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Complete</div>
+      <div class="stat-value" id="stat-done">0</div>
+      <div class="stat-sub" id="stat-pct">0% done</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">In progress</div>
+      <div class="stat-value" id="stat-progress">0</div>
+      <div class="stat-sub">actions active</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">At risk</div>
+      <div class="stat-value" id="stat-risk" style="color:#ff6b6b;">0</div>
+      <div class="stat-sub">need attention</div>
+    </div>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-label">
+      <span>Overall completion</span>
+      <span id="pct-label">0%</span>
+    </div>
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fill" id="progress-fill" style="width:0%"></div>
+    </div>
+  </div>
+
+  <div class="filters">
+    <span class="filter-label">Filter:</span>
+    <button class="filter-btn active" onclick="setFilter('all',this)">All</button>
+    <button class="filter-btn" onclick="setFilter('antony',this)">Antony</button>
+    <button class="filter-btn" onclick="setFilter('catherine',this)">Catherine</button>
+    <button class="filter-btn" onclick="setFilter('peter',this)">Peter May</button>
+    <button class="filter-btn" onclick="setFilter('phase1',this)">Phase 1</button>
+    <button class="filter-btn" onclick="setFilter('phase2',this)">Phase 2</button>
+    <button class="filter-btn" onclick="setFilter('phase3',this)">Phase 3</button>
+    <button class="filter-btn" onclick="setFilter('at-risk',this)">&#9888; At risk</button>
+  </div>
+
+  <div id="actions-container"></div>
+
+  <div class="footer">CBRE GWS Local · Victoria · Confidential · Internal Use Only</div>
+
+</div>
+
+<!-- EDIT PANEL -->
+<div class="overlay" id="overlay" onclick="closeEdit()"></div>
+<div class="edit-panel" id="edit-panel">
+  <button class="edit-close" onclick="closeEdit()">&#x2715;</button>
+  <h3>Edit action</h3>
+  <div class="edit-field">
+    <label>Action description</label>
+    <textarea id="edit-action" rows="4"></textarea>
+  </div>
+  <div class="edit-field">
+    <label>Owner</label>
+    <select id="edit-owner">
+      <option value="antony">Antony</option>
+      <option value="catherine">Catherine</option>
+      <option value="peter">Peter May</option>
+      <option value="team">Team</option>
+    </select>
+  </div>
+  <div class="edit-field">
+    <label>Due date</label>
+    <input type="text" id="edit-due" placeholder="e.g. 14 May">
+  </div>
+  <div class="edit-field">
+    <label>Status</label>
+    <select id="edit-status">
+      <option value="not-started">Not started</option>
+      <option value="in-progress">In progress</option>
+      <option value="at-risk">At risk</option>
+      <option value="done">Complete</option>
+    </select>
+  </div>
+  <button class="edit-save" onclick="saveEdit()">Save changes</button>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════
+// ACTIONS DATA - Edit owners, due dates, and status here
+// owner options: 'antony' | 'catherine' | 'peter' | 'team'
+// status options: 'not-started' | 'in-progress' | 'at-risk' | 'done'
+// ═══════════════════════════════════════════════════
+const ACTIONS = [
+  // PHASE 1 - STABILISE
+  { id:1,  phase:1, action:'Deliver written response to Catherine\'s priority list with named actions and dates', owner:'antony',    due:'14 May', status:'in-progress' },
+  { id:2,  phase:1, action:'Confirm EZRA coaching enrolment for Catherine',                                      owner:'antony',    due:'14 May', status:'not-started' },
+  { id:3,  phase:1, action:'Confirm Antony as executive sponsor on the account - visible to client',             owner:'antony',    due:'16 May', status:'in-progress' },
+  { id:4,  phase:1, action:'Complete bonus scorecard for Monash',                                                owner:'antony',    due:'15 May', status:'not-started' },
+  { id:5,  phase:1, action:'Implement quote turnaround standard - no quote beyond 5 business days',              owner:'catherine', due:'16 May', status:'not-started' },
+  { id:6,  phase:1, action:'Daily stand-up for open quotes older than 5 days',                                   owner:'catherine', due:'16 May', status:'not-started' },
+  { id:7,  phase:1, action:'Nick to produce credible asset capture completion plan with named resources per discipline', owner:'catherine', due:'16 May', status:'at-risk' },
+  { id:8,  phase:1, action:'Cam to own weekly invoice rejection log review - 161 invoices worth $237k',          owner:'catherine', due:'16 May', status:'not-started' },
+  { id:9,  phase:1, action:'Do and Charge root cause analysis on top 10 labour overrun jobs - Cam and Katie joint exercise', owner:'catherine', due:'23 May', status:'not-started' },
+  { id:10, phase:1, action:'Weekly mentor sessions with Catherine - focus weeks 1-3 on boundary setting and delegation', owner:'peter', due:'Ongoing', status:'in-progress' },
+  { id:11, phase:1, action:'All 14 client survey action items - owners confirmed and status known',              owner:'antony',    due:'23 May', status:'not-started' },
+  { id:12, phase:1, action:'Catherine and Antony aligned on 28 May client narrative',                           owner:'antony',    due:'23 May', status:'not-started' },
+  { id:13, phase:1, action:'Reliability Manager decision made',                                                  owner:'antony',    due:'23 May', status:'not-started' },
+  { id:14, phase:1, action:'Client strategy meeting - survey action plan walkthrough, strategic alignment, Do and Charge commercial conversation', owner:'antony', due:'28 May', status:'not-started' },
+  { id:15, phase:1, action:'Reliability Manager hire progressing',                                               owner:'antony',    due:'30 May', status:'not-started' },
+  { id:16, phase:1, action:'Monash alarms revenue closed',                                                       owner:'antony',    due:'2 Jun',  status:'not-started' },
+  { id:17, phase:1, action:'Off-site lunch with Raj Thomas and Sam Russell - relationship anchor, reinforce 28 May agreements', owner:'antony', due:'2 Jun', status:'not-started' },
+  { id:18, phase:1, action:'Handover document from Catherine finalised',                                         owner:'catherine', due:'6 Jun',  status:'not-started' },
+  { id:19, phase:1, action:'Katie Manely authority levels agreed and documented for Catherine\'s leave period',  owner:'antony',    due:'6 Jun',  status:'not-started' },
+  { id:20, phase:1, action:'Evan twice-weekly cadence confirmed and diarised',                                   owner:'antony',    due:'6 Jun',  status:'not-started' },
+  { id:21, phase:1, action:'Cam fully off tools and in operations support role',                                 owner:'catherine', due:'6 Jun',  status:'not-started' },
+  { id:22, phase:1, action:'Raj and Sam briefed on Antony holding executive oversight during Catherine\'s leave', owner:'antony',  due:'6 Jun',  status:'not-started' },
+  { id:23, phase:1, action:'Quarterly executive review rescheduled to accommodate Catherine\'s leave',           owner:'antony',    due:'6 Jun',  status:'not-started' },
+
+  // PHASE 2 - BUILD
+  { id:24, phase:2, action:'Reliability Manager hired',                                                          owner:'antony',    due:'30 Jun', status:'not-started' },
+  { id:25, phase:2, action:'Strategic alignment workshop delivered with Raj Thomas and Sam Russell',             owner:'catherine', due:'30 Jun', status:'not-started' },
+  { id:26, phase:2, action:'First client survey progress report to Antony - all 14 items tracked',              owner:'catherine', due:'6 Jun',  status:'not-started' },
+  { id:27, phase:2, action:'Do and Charge commercial conversation with client on rate cards and model sustainability', owner:'catherine', due:'30 Jun', status:'not-started' },
+  { id:28, phase:2, action:'Nick on formal performance management if asset capture plan not progressing by 23 May', owner:'catherine', due:'30 Jun', status:'not-started' },
+  { id:29, phase:2, action:'Peter May mid-programme development review of Catherine - shared with Antony',       owner:'peter',     due:'Jul',    status:'not-started' },
+  { id:30, phase:2, action:'Quarterly executive client review - Antony and Catherine co-presenting',            owner:'antony',    due:'Jul',    status:'not-started' },
+
+  // PHASE 3 - LEAD
+  { id:31, phase:3, action:'Catherine presenting account performance to Antony and Tom monthly without prompting', owner:'catherine', due:'Aug',  status:'not-started' },
+  { id:32, phase:3, action:'All 14 client survey action items closed or on track',                               owner:'catherine', due:'Sep',    status:'not-started' },
+  { id:33, phase:3, action:'Do and Charge portfolio margin positive',                                            owner:'catherine', due:'Sep',    status:'not-started' },
+  { id:34, phase:3, action:'Optional Services Manager business case built and submitted',                        owner:'catherine', due:'Sep',    status:'not-started' },
+  { id:35, phase:3, action:'Monthly energy and sustainability forum established with Monash',                    owner:'team',      due:'Sep',    status:'not-started' },
+  { id:36, phase:3, action:'Peter May mentor programme formally concluded with sign-off',                        owner:'peter',     due:'Sep',    status:'not-started' },
+];
+
+const PHASE_LABELS = {
+  1: 'Phase 1 - Stabilise (May - June 2026)',
+  2: 'Phase 2 - Build (June - July 2026)',
+  3: 'Phase 3 - Lead (August - September 2026)',
+};
+
+const URGENT_DATES = ['14 May','15 May','16 May','23 May'];
+
+let states = {};
+ACTIONS.forEach(a => {
+  states[a.id] = { action: a.action, owner: a.owner, due: a.due, status: a.status };
+});
+
+let currentFilter = 'all';
+let editingId = null;
+
+function ownerLabel(o) {
+  return { antony:'Antony', catherine:'Catherine', peter:'Peter May', team:'Team' }[o] || o;
+}
+
+function statusLabel(s) {
+  return { 'not-started':'Not started', 'in-progress':'In progress', 'at-risk':'At risk', done:'Complete' }[s] || s;
+}
+
+function statusClass(s) {
+  return { 'not-started':'s-not-started', 'in-progress':'s-in-progress', 'at-risk':'s-at-risk', done:'s-done' }[s] || 's-not-started';
+}
+
+function dueClass(due, status) {
+  if (status === 'done') return 'due-done';
+  if (URGENT_DATES.includes(due)) return 'due-urgent';
+  return '';
+}
+
+function toggleDone(id) {
+  const s = states[id];
+  s.status = s.status === 'done' ? 'not-started' : 'done';
+  render(); updateStats();
+}
+
+function cycleStatus(id, e) {
+  e.stopPropagation();
+  const cycle = ['not-started','in-progress','at-risk','done'];
+  const cur = states[id].status;
+  states[id].status = cycle[(cycle.indexOf(cur) + 1) % cycle.length];
+  render(); updateStats();
+}
+
+function openEdit(id) {
+  editingId = id;
+  const s = states[id];
+  document.getElementById('edit-action').value = s.action;
+  document.getElementById('edit-owner').value = s.owner;
+  document.getElementById('edit-due').value = s.due;
+  document.getElementById('edit-status').value = s.status;
+  document.getElementById('edit-panel').classList.add('open');
+  document.getElementById('overlay').classList.add('open');
+}
+
+function closeEdit() {
+  document.getElementById('edit-panel').classList.remove('open');
+  document.getElementById('overlay').classList.remove('open');
+  editingId = null;
+}
+
+function saveEdit() {
+  if (!editingId) return;
+  states[editingId].action = document.getElementById('edit-action').value;
+  states[editingId].owner = document.getElementById('edit-owner').value;
+  states[editingId].due = document.getElementById('edit-due').value;
+  states[editingId].status = document.getElementById('edit-status').value;
+  closeEdit(); render(); updateStats();
+}
+
+function updateStats() {
+  const all = ACTIONS.map(a => states[a.id]);
+  const done = all.filter(s => s.status === 'done').length;
+  const inprog = all.filter(s => s.status === 'in-progress').length;
+  const atrisk = all.filter(s => s.status === 'at-risk').length;
+  const total = ACTIONS.length;
+  const pct = Math.round(done / total * 100);
+
+  document.getElementById('stat-total').textContent = total;
+  document.getElementById('stat-done').textContent = done;
+  document.getElementById('stat-pct').textContent = pct + '% done';
+  document.getElementById('stat-progress').textContent = inprog;
+  document.getElementById('stat-risk').textContent = atrisk;
+  document.getElementById('pct-label').textContent = pct + '%';
+  document.getElementById('progress-fill').style.width = pct + '%';
+}
+
+function setFilter(f, btn) {
+  currentFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  render();
+}
+
+function render() {
+  const container = document.getElementById('actions-container');
+  container.innerHTML = '';
+
+  let filtered = ACTIONS;
+  if (currentFilter === 'antony') filtered = ACTIONS.filter(a => states[a.id].owner === 'antony');
+  else if (currentFilter === 'catherine') filtered = ACTIONS.filter(a => states[a.id].owner === 'catherine');
+  else if (currentFilter === 'peter') filtered = ACTIONS.filter(a => states[a.id].owner === 'peter');
+  else if (currentFilter === 'phase1') filtered = ACTIONS.filter(a => a.phase === 1);
+  else if (currentFilter === 'phase2') filtered = ACTIONS.filter(a => a.phase === 2);
+  else if (currentFilter === 'phase3') filtered = ACTIONS.filter(a => a.phase === 3);
+  else if (currentFilter === 'at-risk') filtered = ACTIONS.filter(a => states[a.id].status === 'at-risk');
+
+  const phases = [...new Set(filtered.map(a => a.phase))];
+
+  phases.forEach(phase => {
+    const phActions = filtered.filter(a => a.phase === phase);
+    const phDone = phActions.filter(a => states[a.id].status === 'done').length;
+
+    const block = document.createElement('div');
+    block.className = 'phase-block';
+
+    const ph = document.createElement('div');
+    ph.className = 'phase-header';
+    ph.innerHTML = `<span class="phase-name">${PHASE_LABELS[phase]}</span><span class="phase-count">${phDone} / ${phActions.length} complete</span>`;
+    block.appendChild(ph);
+
+    phActions.forEach(a => {
+      const s = states[a.id];
+      const isDone = s.status === 'done';
+
+      const row = document.createElement('div');
+      row.className = 'action-row';
+
+      row.innerHTML = `
+        <div class="check-circle ${isDone ? 'done' : ''}" onclick="toggleDone(${a.id})" title="Mark complete/incomplete">&#10003;</div>
+        <div class="action-text ${isDone ? 'done-text' : ''}" onclick="openEdit(${a.id})" style="cursor:pointer;" title="Click to edit">${s.action}</div>
+        <div class="action-owner"><span class="owner-pill owner-${s.owner}" onclick="openEdit(${a.id})" title="Click to edit owner">${ownerLabel(s.owner)}</span></div>
+        <div class="action-due ${dueClass(s.due, s.status)}">${s.due}</div>
+        <div class="action-status"><span class="status-pill ${statusClass(s.status)}" onclick="cycleStatus(${a.id}, event)" title="Click to cycle status">${statusLabel(s.status)}</span></div>
+      `;
+      block.appendChild(row);
+    });
+
+    container.appendChild(block);
+  });
+}
+
+render();
+updateStats();
+</script>
+</body>
+</html>
